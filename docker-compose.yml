@@ -1,0 +1,8 @@
+services:
+  proxy:
+    build: .
+    ports:
+      - "502:502"
+    volumes:
+      - ./config.yaml:/app/config.yaml:ro
+    restart: unless-stopped
