@@ -28,7 +28,13 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. The proxy starts and stays running via `docker compose up` with only a config.example.yaml-derived config file — no hardcoded IPs or credentials anywhere in the repository
   4. Structured log output shows connection events, poll cycles, register reads, and write attempts with contextual fields (register address, parameter name, value)
   5. The HA BenPru/luxtronik HACS integration continues to function normally while the proxy polls at 30 s intervals on the same controller
-**Plans**: TBD
+**Plans:** 4 plans
+
+Plans:
+- [ ] 01-01-PLAN.md — Project scaffold, config, logging, register definitions and map
+- [ ] 01-02-PLAN.md — Register cache with write validation, Luxtronik client wrapper
+- [ ] 01-03-PLAN.md — Modbus TCP server, polling engine, main entry point
+- [ ] 01-04-PLAN.md — Docker deployment, config.example.yaml, integration test
 
 ### Phase 2: Integration-Ready Register Map
 **Goal**: The proxy covers all registers needed by evcc and Home Assistant, including the SG-ready virtual register, the full parameter database is accessible by name in YAML config, and a tested evcc YAML snippet is ready for documentation
@@ -59,6 +65,6 @@ Phases execute in numeric order: 1 → 2 → 3
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Core Proxy | 0/TBD | Not started | - |
+| 1. Core Proxy | 0/4 | Planned | - |
 | 2. Integration-Ready Register Map | 0/TBD | Not started | - |
 | 3. Documentation and Release | 0/TBD | Not started | - |
