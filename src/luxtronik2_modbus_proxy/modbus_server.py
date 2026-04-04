@@ -23,11 +23,11 @@ API notes (pymodbus 3.12.1):
 from __future__ import annotations
 
 import structlog
-from pymodbus.datastore import ModbusDeviceContext, ModbusServerContext
+from pymodbus.datastore import ModbusServerContext
 from pymodbus.server import ModbusTcpServer
 
 from luxtronik2_modbus_proxy.config import ProxyConfig
-from luxtronik2_modbus_proxy.register_cache import RegisterCache
+from luxtronik2_modbus_proxy.register_cache import ProxyDeviceContext, RegisterCache
 
 log = structlog.get_logger(__name__)
 
@@ -62,8 +62,12 @@ def build_modbus_server(cache: RegisterCache, config: ProxyConfig) -> ModbusTcpS
     # Build the device context linking function codes to datablocks:
     # hr= maps FC3/FC6/FC16 (holding registers) to the proxy's validated datablock.
     # ir= maps FC4 (input registers) to the read-only calculations datablock.
-    # CRITICAL: Use ModbusDeviceContext (not ModbusSlaveContext) — renamed in 3.x.
-    device_context = ModbusDeviceContext(
+    # CRITICAL: Use ProxyDeviceContext (not ModbusDeviceContext directly) — the proxy
+    # subclass overrides async_setValues to route FC6/FC16 writes through
+    # ProxyHoldingDataBlock.async_setValues for validation and queuing. The base
+    # ModbusDeviceContext only calls the sync setValues on the datablock, bypassing
+    # any async override. (Rule 1 fix: write validation was silently bypassed.)
+    device_context = ProxyDeviceContext(
         hr=cache.holding_datablock,
         ir=cache.input_datablock,
     )

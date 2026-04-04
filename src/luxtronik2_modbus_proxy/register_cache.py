@@ -1,12 +1,19 @@
 """Register cache for luxtronik2-modbus-proxy.
 
 Provides the in-memory Modbus datastore that Modbus clients read from between
-polling cycles. Consists of two components:
+polling cycles. Consists of three components:
 
 - ``ProxyHoldingDataBlock``: Subclasses ``ModbusSequentialDataBlock`` to intercept
   Modbus write commands. Validates each write against the register map before
   accepting, then enqueues valid writes for the polling engine to forward to the
-  Luxtronik controller.
+  Luxtronik controller. ``async_setValues`` is called directly (NOT via ModbusDeviceContext,
+  which only calls the sync ``setValues`` on the datablock).
+
+- ``ProxyDeviceContext``: Subclasses ``ModbusDeviceContext`` to override ``async_setValues``
+  so that holding register write requests (FC6/FC16) are routed to
+  ``ProxyHoldingDataBlock.async_setValues``. This is required because pymodbus 3.x calls
+  ``context.async_setValues`` at the server level but ``ModbusDeviceContext`` only delegates
+  to the sync ``setValues`` on the datablock — bypassing any async override on the datablock.
 
 - ``RegisterCache``: Wraps both the holding (read/write) and input (read-only)
   datablocks. Exposes wire-address-aware update methods called by the polling
@@ -22,9 +29,10 @@ from __future__ import annotations
 
 import asyncio
 from datetime import datetime
+from typing import Union
 
 import structlog
-from pymodbus.datastore import ModbusSequentialDataBlock
+from pymodbus.datastore import ModbusDeviceContext, ModbusSequentialDataBlock
 from pymodbus.datastore.sequential import ExcCodes
 
 from luxtronik2_modbus_proxy.register_map import RegisterMap
@@ -140,6 +148,60 @@ class ProxyHoldingDataBlock(ModbusSequentialDataBlock):
             )
 
         return result
+
+
+class ProxyDeviceContext(ModbusDeviceContext):
+    """Modbus device context that routes holding register writes through async validation.
+
+    pymodbus 3.x calls ``context.async_setValues`` at the server level (in PDU handlers
+    like ``WriteSingleRegisterRequest.datastore_update``). However, the base
+    ``ModbusDeviceContext`` inherits ``async_setValues`` from ``ModbusBaseDeviceContext``,
+    which simply delegates to the synchronous ``self.setValues`` — bypassing any async
+    override defined on the datablock subclass.
+
+    This subclass overrides ``async_setValues`` to call
+    ``ProxyHoldingDataBlock.async_setValues`` directly for holding register function codes
+    (FC3=3, FC6=6, FC16=16). This ensures write validation, the enable_writes gate, and
+    write queuing run on every FC6/FC16 request from Modbus clients.
+
+    For all other function codes (discrete inputs, coils, input registers), the default
+    synchronous path is used because those datablocks do not require async interception.
+
+    Address convention: ``ModbusDeviceContext`` (and this class) receives the wire address
+    (0-based) from the PDU handler. ``ProxyHoldingDataBlock.async_setValues`` expects the
+    datablock address (1-based), so this method adds +1 before calling it — matching the
+    behavior of the parent ``setValues`` method.
+    """
+
+    # Function codes that map to holding registers (hr).
+    _HOLDING_FC: frozenset[int] = frozenset({3, 6, 16, 22, 23})
+
+    async def async_setValues(
+        self,
+        func_code: int,
+        address: int,
+        values: list[int],
+    ) -> Union[None, ExcCodes]:
+        """Route holding register writes to async validation; others use sync path.
+
+        Args:
+            func_code: Modbus function code (e.g., 6 = Write Single Register).
+            address: 0-based wire address from the PDU handler.
+            values: List of 16-bit integer values to write.
+
+        Returns:
+            None on success, ExcCodes value if validation or write fails.
+        """
+        if func_code in self._HOLDING_FC:
+            # Holding register write — delegate to ProxyHoldingDataBlock.async_setValues.
+            # Convert wire address (0-based) to datablock address (1-based) by adding +1,
+            # matching what ModbusDeviceContext.setValues does in the sync path.
+            datablock_address = address + 1
+            hr_block = self.store["h"]
+            return await hr_block.async_setValues(datablock_address, values)
+
+        # Non-holding write (coils, discrete inputs) — use the standard sync path.
+        return self.setValues(func_code, address, values)
 
 
 class RegisterCache:
