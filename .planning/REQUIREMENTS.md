@@ -1,0 +1,100 @@
+# Requirements: luxtronik2-modbus-proxy
+
+**Defined:** 2026-04-04
+**Core Value:** Owners of Luxtronik 2.0 heat pumps can integrate them into evcc and modern energy management systems via standard Modbus TCP, without needing to understand the proprietary protocol or Modbus register numbers.
+
+## v1 Requirements
+
+Requirements for initial release. Each maps to roadmap phases.
+
+### Protocol Translation
+
+- [ ] **PROTO-01**: Proxy exposes a Modbus TCP server on port 502 supporting function codes 3 (read holding), 4 (read input), 6 (write single), 16 (write multiple)
+- [ ] **PROTO-02**: Proxy connects to Luxtronik controller on port 8889, reads mapped parameters, and disconnects within a single polling cycle
+- [ ] **PROTO-03**: Proxy uses connect-read-disconnect pattern with configurable polling interval (default 30s) to coexist with HA BenPru integration
+- [ ] **PROTO-04**: Proxy maintains an in-memory register cache that Modbus clients read from between polling cycles
+- [ ] **PROTO-05**: Proxy never holds the Luxtronik TCP connection longer than needed for a single read/write cycle
+
+### Register Mapping
+
+- [ ] **REG-01**: Proxy ships with a curated default register set covering evcc essentials (temperatures, operating mode, SG-ready, power consumption)
+- [ ] **REG-02**: Proxy includes a built-in mapping database of all 1,126 Luxtronik parameters, browsable and selectable by name in YAML config
+- [ ] **REG-03**: Proxy exposes 251 calculations as read-only input registers in a dedicated address range
+- [ ] **REG-04**: Proxy exposes 355 visibilities as read-only input registers in a dedicated address range
+- [ ] **REG-05**: Proxy provides an SG-ready virtual register (integer 0-3) that maps to the correct Luxtronik mode combinations for evcc integration
+
+### Write Support
+
+- [ ] **WRITE-01**: Proxy can write holding registers to the Luxtronik controller (operating mode, setpoints, SG-ready)
+- [ ] **WRITE-02**: Proxy validates write values against known parameter ranges before sending to controller
+- [ ] **WRITE-03**: Proxy rate-limits writes to protect Luxtronik controller NAND flash from excessive wear
+
+### Deployment
+
+- [ ] **DEPLOY-01**: Proxy runs as a Docker container with configuration via mounted YAML file
+- [ ] **DEPLOY-02**: Proxy runs as a systemd service on Linux
+- [ ] **DEPLOY-03**: Proxy provides a config.example.yaml with placeholder values and comments explaining each option
+
+### Integration
+
+- [ ] **INTEG-01**: Documentation includes evcc YAML configuration example for manual Luxtronik integration
+- [ ] **INTEG-02**: Documentation explains coexistence with HA BenPru/luxtronik HACS integration
+
+### Observability
+
+- [ ] **OBS-01**: Proxy uses structured logging (structlog) with configurable log levels
+- [ ] **OBS-02**: Proxy logs connection events, polling cycles, register reads/writes, and errors with context
+
+### Documentation
+
+- [ ] **DOCS-01**: README in English and German with project overview, quick start, and architecture description
+- [ ] **DOCS-02**: Developer quickstart guide (EN + DE) for building and running from source
+- [ ] **DOCS-03**: End-user guide (EN + DE) for installing and configuring the proxy
+- [ ] **DOCS-04**: GitHub Pages project homepage
+
+## v2 Requirements
+
+Deferred to future release. Tracked but not in current roadmap.
+
+### Integration
+
+- **INTEG-10**: evcc upstream heater template PR (after community validation)
+- **INTEG-11**: Home Assistant integration via HACS custom component
+
+### Observability
+
+- **OBS-10**: Health/status HTTP endpoint for monitoring
+- **OBS-11**: Prometheus metrics endpoint
+- **OBS-12**: Alerting on connection failures or stale cache
+
+### Community
+
+- **COMM-10**: Community announcements (evcc forum, HA forum, haustechnikdialog.de)
+
+## Out of Scope
+
+| Feature | Reason |
+|---------|--------|
+| Weather-forecast-based optimization | v2+ feature, not needed for core proxy |
+| OAuth/authentication on proxy | Local network only, unnecessary complexity |
+| Firmware upgrade/modification | Hardware limitation, not possible |
+| Claude skill for natural language control | Private repo only, not published here |
+| Persistent Luxtronik connection | Breaks HA coexistence, violates single-connection constraint |
+| Expose all registers by default | Security risk, confusing for users — curated defaults + opt-in |
+
+## Traceability
+
+Which phases cover which requirements. Updated during roadmap creation.
+
+| Requirement | Phase | Status |
+|-------------|-------|--------|
+| (populated by roadmapper) | | |
+
+**Coverage:**
+- v1 requirements: 22 total
+- Mapped to phases: 0
+- Unmapped: 22 ⚠️
+
+---
+*Requirements defined: 2026-04-04*
+*Last updated: 2026-04-04 after initial definition*
