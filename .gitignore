@@ -1,0 +1,32 @@
+# Python build artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+UNKNOWN.egg-info/
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# pytest cache
+.pytest_cache/
+.coverage
+htmlcov/
+.mypy_cache/
+
+# Configuration with real data — NEVER commit these
+config.yaml
+.env
+
+# Editor artifacts
+.DS_Store
+*.swp
+*.swo
