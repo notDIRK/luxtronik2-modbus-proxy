@@ -31,10 +31,10 @@ Decimal phases appear between their surrounding integers in numeric order.
 **Plans:** 4 plans
 
 Plans:
-- [ ] 01-01-PLAN.md — Project scaffold, config, logging, register definitions and map
-- [ ] 01-02-PLAN.md — Register cache with write validation, Luxtronik client wrapper
-- [ ] 01-03-PLAN.md — Modbus TCP server, polling engine, main entry point
-- [ ] 01-04-PLAN.md — Docker deployment, config.example.yaml, integration test
+- [x] 01-01-PLAN.md — Project scaffold, config, logging, register definitions and map
+- [x] 01-02-PLAN.md — Register cache with write validation, Luxtronik client wrapper
+- [x] 01-03-PLAN.md — Modbus TCP server, polling engine, main entry point
+- [x] 01-04-PLAN.md — Docker deployment, config.example.yaml, integration test
 
 ### Phase 2: Integration-Ready Register Map
 **Goal**: The proxy covers all registers needed by evcc and Home Assistant, including the SG-ready virtual register, the full parameter database is accessible by name in YAML config, and a tested evcc YAML snippet is ready for documentation
