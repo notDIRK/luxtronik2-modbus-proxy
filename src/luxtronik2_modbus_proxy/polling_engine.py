@@ -30,6 +30,7 @@ import structlog
 from luxtronik2_modbus_proxy.config import ProxyConfig
 from luxtronik2_modbus_proxy.luxtronik_client import LuxtronikClient
 from luxtronik2_modbus_proxy.register_cache import RegisterCache
+from luxtronik2_modbus_proxy.sg_ready import SG_READY_WIRE_ADDRESS, SgReadyWrite
 
 
 class PollingEngine:
@@ -191,14 +192,42 @@ class PollingEngine:
         """
         # Collect all pending writes from the queue (non-blocking drain).
         # Use get_nowait() so this doesn't block the event loop.
+        # Queue items are either:
+        #   - tuple (wire_address, values): normal register write from a Modbus client.
+        #   - SgReadyWrite: virtual SG-ready register write needing mode translation.
         pending: dict[int, list[int]] = {}
+        pending_sg_ready: SgReadyWrite | None = None  # keep last SG-ready write (deduplicate)
+
         while True:
             try:
-                wire_address, values = self._write_queue.get_nowait()
-                # Keep only the last value for duplicate addresses.
-                pending[wire_address] = values
+                item = self._write_queue.get_nowait()
+                if isinstance(item, SgReadyWrite):
+                    # Deduplicate: keep only the last SG-ready write (T-02-10).
+                    pending_sg_ready = item
+                else:
+                    wire_address, values = item
+                    # Keep only the last value for duplicate addresses.
+                    pending[wire_address] = values
             except asyncio.QueueEmpty:
                 break
+
+        # Process SG-ready write: translate mode to underlying parameter writes and
+        # merge into param_writes for the rate-limited upstream call.
+        # Rate limiting applies to the underlying parameter addresses (3, 4),
+        # NOT to address 5000 (virtual, T-02-09).
+        sg_ready_mode_to_apply: int | None = None
+        if pending_sg_ready is not None:
+            # Merge SG-ready parameter writes into the normal pending dict.
+            # If the same underlying address (3 or 4) was also written directly,
+            # the SG-ready value takes precedence (last write wins by merge order).
+            for param_addr, param_value in pending_sg_ready.param_writes.items():
+                pending[param_addr] = [param_value]
+            sg_ready_mode_to_apply = pending_sg_ready.mode
+            self._log.debug(
+                "sg_ready_translating",
+                mode=pending_sg_ready.mode,
+                param_writes=pending_sg_ready.param_writes,
+            )
 
         if not pending:
             return
@@ -230,7 +259,21 @@ class PollingEngine:
             return
 
         # Forward the validated writes to the Luxtronik controller.
-        await self._client.async_write(param_writes)
+        # On success, update the SG-ready register in the cache to reflect the
+        # successfully applied mode (D-13: reading 5000 returns last successful mode).
+        try:
+            await self._client.async_write(param_writes)
+        except Exception:
+            # Luxtronik write failed. Log at ERROR level (D-13).
+            # The SG-ready datablock is NOT updated — it retains the previous mode,
+            # so reads return the last successfully applied value.
+            if sg_ready_mode_to_apply is not None:
+                self._log.error(
+                    "sg_ready_write_failed",
+                    mode=sg_ready_mode_to_apply,
+                    exc_info=True,
+                )
+            raise
 
         # Update timestamps for successfully forwarded writes.
         for address, value in param_writes.items():
@@ -239,4 +282,14 @@ class PollingEngine:
                 "write_forwarded",
                 register=address,
                 value=value,
+            )
+
+        # Update the SG-ready register in the cache ONLY after a successful upstream
+        # write. This implements D-13: the register always reflects the last
+        # successfully applied mode, never an attempted-but-failed mode.
+        if sg_ready_mode_to_apply is not None:
+            self._cache.update_holding_values(SG_READY_WIRE_ADDRESS, [sg_ready_mode_to_apply])
+            self._log.info(
+                "sg_ready_mode_applied",
+                mode=sg_ready_mode_to_apply,
             )

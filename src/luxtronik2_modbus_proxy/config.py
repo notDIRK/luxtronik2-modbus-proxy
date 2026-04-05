@@ -96,6 +96,15 @@ class ProxyConfig(BaseSettings):
         default_factory=RegistersConfig,
         description="Extra registers to expose beyond curated defaults",
     )
+    sg_ready_mode_map: dict[int, dict[int, int]] | None = Field(
+        default=None,
+        description=(
+            "Custom SG-ready mode-to-parameter mapping. "
+            "Keys: mode 0-3, Values: dict of Luxtronik parameter index -> value. "
+            "If None, uses the built-in default (HeatingMode + HotWaterMode combinations). "
+            "Example: {0: {3: 4, 4: 4}, 1: {3: 0, 4: 0}, 2: {3: 2, 4: 0}, 3: {3: 0, 4: 2}}"
+        ),
+    )
 
     @classmethod
     def settings_customise_sources(

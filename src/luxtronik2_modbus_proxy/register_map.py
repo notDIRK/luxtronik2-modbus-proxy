@@ -34,6 +34,7 @@ from dataclasses import dataclass, field
 from luxtronik2_modbus_proxy.register_definitions.calculations import INPUT_REGISTERS, CalculationDef
 from luxtronik2_modbus_proxy.register_definitions.parameters import HOLDING_REGISTERS, NAME_TO_INDEX, ParameterDef
 from luxtronik2_modbus_proxy.register_definitions.visibilities import VISIBILITY_REGISTERS, VisibilityDef
+from luxtronik2_modbus_proxy.sg_ready import SG_READY_WIRE_ADDRESS
 
 
 def resolve_parameter_names(names: list[str]) -> dict[int, ParameterDef]:
@@ -169,6 +170,20 @@ class RegisterMap:
                 data_type=calc_def.data_type,
                 writable=False,  # Calculations are always read-only
             )
+
+        # Register the SG-ready virtual register at wire address 5000 (Plan 03, D-09).
+        # This is a virtual register — it does not map to a single Luxtronik parameter.
+        # Instead, writes to this address trigger a mode-to-parameter translation in
+        # ProxyHoldingDataBlock.async_setValues. Registering it here makes is_writable(5000)
+        # return True and validate_write_value(5000, mode) check modes [0,1,2,3].
+        self._holding[SG_READY_WIRE_ADDRESS] = RegisterEntry(
+            address=SG_READY_WIRE_ADDRESS,
+            luxtronik_id="SG_READY",
+            name="SG-ready mode (0=EVU lock, 1=Normal, 2=Recommended, 3=Force on)",
+            data_type="SGReadyMode",
+            writable=True,
+            allowed_values=[0, 1, 2, 3],
+        )
 
         # Build visibility lookup: address -> RegisterEntry (355 entries, 1000-1354).
         # Visibility wire addresses already have the 1000 offset applied in the definitions.

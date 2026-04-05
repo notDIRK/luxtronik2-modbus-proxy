@@ -36,6 +36,12 @@ from pymodbus.datastore import ModbusDeviceContext, ModbusSequentialDataBlock
 from pymodbus.datastore.sequential import ExcCodes
 
 from luxtronik2_modbus_proxy.register_map import RegisterMap
+from luxtronik2_modbus_proxy.sg_ready import (
+    SG_READY_DATABLOCK_ADDRESS,
+    SG_READY_WIRE_ADDRESS,
+    SgReadyWrite,
+    translate_sg_ready_mode,
+)
 
 logger = structlog.get_logger(__name__)
 
@@ -136,6 +142,30 @@ class ProxyHoldingDataBlock(ModbusSequentialDataBlock):
                     value=value,
                 )
                 return ExcCodes.ILLEGAL_VALUE
+
+        # SG-ready virtual register interception (D-10, D-11, T-02-07).
+        # Address 5000 is a virtual register — it does not map to a single Luxtronik
+        # parameter. Instead, the mode value translates to HeatingMode + HotWaterMode
+        # parameter writes that are forwarded by the polling engine.
+        #
+        # D-13 compliance: The datablock is NOT updated here. The polling engine updates
+        # the datablock only after a successful Luxtronik write (update_holding_values).
+        # Reading register 5000 returns the last successfully applied mode, not the
+        # last attempted mode. On Luxtronik write failure, the previous mode is preserved.
+        if wire_address == SG_READY_WIRE_ADDRESS:
+            mode = values[0]
+            try:
+                param_writes = translate_sg_ready_mode(mode)
+            except ValueError:
+                # Should not reach here because Gate 3 already validated mode against
+                # allowed_values [0,1,2,3]. This is a defense-in-depth catch.
+                logger.warning("sg_ready_invalid_mode", mode=mode)
+                return ExcCodes.ILLEGAL_VALUE
+            # Enqueue the SG-ready write for the polling engine to process.
+            sg_write = SgReadyWrite(mode=mode, param_writes=param_writes)
+            await self._write_queue.put(sg_write)
+            logger.info("sg_ready_write_accepted", mode=mode, param_writes=param_writes)
+            return None
 
         # All validation passed — update the datablock and enqueue for upstream delivery.
         result = await super().async_setValues(address, values)
@@ -252,6 +282,11 @@ class RegisterCache:
             address=1,
             values=[0] * register_map.input_block_size,
         )
+
+        # Initialize the SG-ready virtual register to mode 1 (Normal) so Modbus clients
+        # reading register 5000 before any SG-ready write get a sensible default value.
+        # (D-11: initial value = Normal, per research open question 2 resolution)
+        self._holding_datablock.setValues(SG_READY_DATABLOCK_ADDRESS, [1])
 
         # Cache starts stale until the first successful Luxtronik read completes.
         self._is_stale: bool = True
