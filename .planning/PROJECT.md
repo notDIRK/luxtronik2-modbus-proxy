@@ -12,18 +12,19 @@ Owners of Luxtronik 2.0 heat pumps can integrate them into evcc and modern energ
 
 ### Validated
 
-(None yet — ship to validate)
+- [x] Modbus TCP proxy translating binary protocol to Modbus registers (read + write) — Validated in Phase 1: Core Proxy
+- [x] Coexist with HA: proxy connects briefly, reads/writes, disconnects (configurable interval) — Validated in Phase 1: Core Proxy
+- [x] Curated default register set (evcc/HA essentials: temps, operating mode, SG-ready, power) — Validated in Phase 1: Core Proxy
+- [x] Docker container deployment — Validated in Phase 1: Core Proxy
+- [x] Structured logging for development debugging and runtime diagnostics — Validated in Phase 1: Core Proxy
 
 ### Active
 
 - [ ] Home Assistant integration via BenPru/luxtronik HACS (config, automations, Tibber)
-- [ ] Modbus TCP proxy translating binary protocol to Modbus registers (read + write)
-- [ ] Coexist with HA: proxy connects briefly, reads/writes, disconnects (configurable interval)
-- [ ] Curated default register set (evcc/HA essentials: temps, operating mode, SG-ready, power)
+- [ ] Curated default register set expansion (full mapping database of all 1,126 parameters)
 - [ ] Built-in mapping database of all 1,126 parameters, browsable/selectable via config
 - [ ] evcc integration: manual docs first, then upstream PR when stable
-- [ ] Docker container and systemd service deployment
-- [ ] Structured logging for development debugging and runtime diagnostics
+- [ ] systemd service deployment
 - [ ] Bilingual documentation (EN + DE), two tracks (developer quickstart + end-user guide)
 - [ ] GitHub Pages project homepage
 - [ ] Community announcements (evcc, HA forum, haustechnikdialog.de)
@@ -96,4 +97,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-04-04 after initialization*
+*Last updated: 2026-04-05 after Phase 1 completion*
