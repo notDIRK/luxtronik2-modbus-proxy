@@ -502,22 +502,22 @@ This mapping must be documented clearly since the evcc mode numbering (1-3) diff
 
 **If this table is empty:** Not applicable — 4 assumptions require hardware validation before release.
 
-## Open Questions
+## Open Questions (RESOLVED)
 
 1. **SG-ready mode integer value evcc sends**
    - What we know: evcc's `sgready` charger type uses modes internally labeled Normal(1), Boost(2), Dimm(3). The `setmode` provider writes these integers via Modbus.
    - What's unclear: Does evcc write 1/2/3 or 0/1/2? The stiebel-lwa.yaml template writes 0/1/0 as a pair of register bits — the proxy's single-register approach is different.
-   - Recommendation: Document the proxy's SG-ready register as accepting 0-3 per BWWP standard. Map from evcc's integer to proxy's integer in documentation. Verify with real evcc.
+   - RESOLVED: Proxy accepts 0-3 per BWWP standard. evcc mapping documented in evcc-integration.md with hardware validation note. [ASSUMED — requires hardware validation]
 
 2. **Operating mode readback for SG-ready getmode**
    - What we know: D-11 specifies SG-ready register is read-write; reading returns last applied mode.
    - What's unclear: evcc's `getmode` may expect specific integer values that correspond to SG-ready state names.
-   - Recommendation: Store last-written SG-ready mode in a Python int; return it on FC3 reads of address 5000. Initialize to 1 (Normal) on startup.
+   - RESOLVED: Store last-written mode in Python int, initialize to 1 (Normal) on startup. Return via FC3 reads of address 5000.
 
 3. **BenPru HA integration: does it read visibilities?**
    - What we know: BenPru reads parameters and calculations from port 8889. Phase 2 adds visibility reads.
    - What's unclear: Does adding visibility reads to the proxy's poll cycle materially increase contention with BenPru?
-   - Recommendation: Implement poll-once for visibilities (Pitfall 6 mitigation). Document that visibility data is cached from first successful poll, not refreshed per cycle.
+   - RESOLVED: Poll visibilities once on first successful cycle (Pitfall 6 mitigation). Cached, not refreshed per cycle.
 
 ## Environment Availability
 
