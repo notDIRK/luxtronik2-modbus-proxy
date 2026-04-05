@@ -45,7 +45,12 @@ Plans:
   2. The SG-ready virtual register accepts integer 0–3 and the proxy translates each value to the correct Luxtronik parameter combination, confirmed by observing controller state change
   3. A user can add any of the 1,126 Luxtronik parameters to the register map by name in config.yaml without needing to look up raw parameter indices
   4. Calculation registers (251 entries) and visibility registers (355 entries) are accessible as read-only input registers in their dedicated address ranges
-**Plans**: TBD
+**Plans:** 3 plans
+
+Plans:
+- [ ] 02-01-PLAN.md — Full parameter/calculation/visibility databases and RegisterMap extension
+- [ ] 02-02-PLAN.md — User-selectable parameters via config, fuzzy validation, list-params CLI
+- [ ] 02-03-PLAN.md — SG-ready virtual register, evcc integration docs, HA coexistence docs
 
 ### Phase 3: Documentation and Release
 **Goal**: A non-technical user can install, configure, and validate the proxy from published documentation alone, in either English or German, without needing to read source code
@@ -65,6 +70,6 @@ Phases execute in numeric order: 1 → 2 → 3
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Core Proxy | 0/4 | Planned | - |
-| 2. Integration-Ready Register Map | 0/TBD | Not started | - |
+| 1. Core Proxy | 4/4 | Complete | - |
+| 2. Integration-Ready Register Map | 0/3 | Planned | - |
 | 3. Documentation and Release | 0/TBD | Not started | - |
