@@ -173,15 +173,77 @@ async def shutdown(
     log.info("proxy_stopped")
 
 
+def _list_params(search_term: str | None, reg_type: str) -> None:
+    """Print a tabular list of Luxtronik register definitions to stdout.
+
+    Loads the requested register type database and prints address, symbolic name,
+    data type, and writability (for parameters) in a formatted table. Supports
+    case-insensitive substring filtering via search_term.
+
+    Args:
+        search_term: Optional substring to filter results. Case-insensitive match
+            against both luxtronik_id and name fields. If None, all entries shown.
+        reg_type: Register type to list: 'parameters', 'calculations', or 'visibilities'.
+    """
+    if reg_type == "parameters":
+        from luxtronik2_modbus_proxy.register_definitions.parameters import HOLDING_REGISTERS as reg_db
+        show_writable = True
+    elif reg_type == "calculations":
+        from luxtronik2_modbus_proxy.register_definitions.calculations import INPUT_REGISTERS as reg_db
+        show_writable = False
+    else:
+        from luxtronik2_modbus_proxy.register_definitions.visibilities import VISIBILITY_REGISTERS as reg_db
+        show_writable = False
+
+    if show_writable:
+        header = f"{'Address':>7}  {'Luxtronik ID':<40}  {'Type':<25}  {'Writable':<8}"
+        separator = "-" * 88
+    else:
+        header = f"{'Address':>7}  {'Luxtronik ID':<40}  {'Type':<25}"
+        separator = "-" * 76
+
+    print(header)
+    print(separator)
+
+    count = 0
+    for address in sorted(reg_db.keys()):
+        entry = reg_db[address]
+        luxtronik_id = entry.luxtronik_id
+        name = getattr(entry, "name", luxtronik_id)
+        data_type = entry.data_type
+
+        # Apply case-insensitive substring filter if requested.
+        if search_term is not None:
+            term = search_term.lower()
+            if term not in luxtronik_id.lower() and term not in name.lower():
+                continue
+
+        if show_writable:
+            writable_str = "yes" if entry.writable else "no"
+            print(f"{address:>7}  {luxtronik_id:<40}  {data_type:<25}  {writable_str:<8}")
+        else:
+            print(f"{address:>7}  {luxtronik_id:<40}  {data_type:<25}")
+        count += 1
+
+    print(separator)
+    print(f"{count} {reg_type}")
+
+
 def cli() -> None:
     """Command-line entry point for the luxtronik2-modbus-proxy.
 
-    Parses the ``--config`` argument and starts the proxy using ``asyncio.run``.
-    Installed as the ``luxtronik2-modbus-proxy`` console script via
-    ``[project.scripts]`` in pyproject.toml.
+    Parses arguments and either starts the proxy (default, no subcommand) or
+    runs a utility subcommand (list-params). Installed as the
+    ``luxtronik2-modbus-proxy`` console script via ``[project.scripts]`` in
+    pyproject.toml.
 
     The default config path is ``/app/config.yaml`` to match the Docker volume
     mount convention (``-v ./config.yaml:/app/config.yaml``).
+
+    Subcommands:
+        list-params: Browse the built-in Luxtronik parameter database. Supports
+            --search for case-insensitive filtering and --type to select
+            parameters, calculations, or visibilities.
     """
     parser = argparse.ArgumentParser(
         prog="luxtronik2-modbus-proxy",
@@ -193,8 +255,33 @@ def cli() -> None:
         metavar="PATH",
         help="Path to the YAML configuration file (default: /app/config.yaml)",
     )
+    subparsers = parser.add_subparsers(dest="command")
+
+    # list-params subcommand: browse and search the built-in parameter database.
+    list_cmd = subparsers.add_parser(
+        "list-params",
+        help="Browse the built-in Luxtronik parameter database",
+    )
+    list_cmd.add_argument(
+        "--search",
+        metavar="TERM",
+        default=None,
+        help="Filter by name (case-insensitive substring match)",
+    )
+    list_cmd.add_argument(
+        "--type",
+        choices=["parameters", "calculations", "visibilities"],
+        default="parameters",
+        help="Register type to list (default: parameters)",
+    )
+
     args = parser.parse_args()
 
+    if args.command == "list-params":
+        _list_params(args.search, args.type)
+        sys.exit(0)
+
+    # No subcommand given: run the proxy.
     try:
         asyncio.run(main(config_path=args.config))
     except KeyboardInterrupt:
