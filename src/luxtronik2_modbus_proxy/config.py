@@ -14,8 +14,25 @@ from __future__ import annotations
 import logging
 from typing import Any, ClassVar
 
-from pydantic import Field
+from pydantic import BaseModel, Field
 from pydantic_settings import BaseSettings, PydanticBaseSettingsSource, YamlConfigSettingsSource
+
+
+class RegistersConfig(BaseModel):
+    """User-selectable extra parameters beyond curated defaults.
+
+    Parameters are specified by their Luxtronik symbolic name (e.g., 'ID_Einst_WK_akt').
+    The proxy resolves names to Luxtronik indices at startup and exposes them
+    as additional holding registers.
+
+    Attributes:
+        parameters: List of Luxtronik parameter names to expose as extra holding registers.
+    """
+
+    parameters: list[str] = Field(
+        default_factory=list,
+        description="Extra Luxtronik parameter names to expose as holding registers",
+    )
 
 
 class ProxyConfig(BaseSettings):
@@ -74,6 +91,10 @@ class ProxyConfig(BaseSettings):
         default=60,
         ge=10,
         description="Minimum seconds between writes to the same register (protects NAND flash)",
+    )
+    registers: RegistersConfig = Field(
+        default_factory=RegistersConfig,
+        description="Extra registers to expose beyond curated defaults",
     )
 
     @classmethod

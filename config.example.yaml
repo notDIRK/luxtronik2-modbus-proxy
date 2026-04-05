@@ -28,3 +28,12 @@ log_level: "INFO"
 enable_writes: false
 # Minimum seconds between writes to the same register (protects controller NAND flash)
 write_rate_limit: 60
+
+# Extra registers to expose beyond the curated defaults
+# The proxy always exposes essential evcc registers (heating mode, hot water mode, temperatures).
+# Add additional Luxtronik parameters by their symbolic name.
+# Run 'luxtronik2-modbus-proxy list-params --search <term>' to discover available parameters.
+# registers:
+#   parameters:
+#     - ID_Einst_WK_akt           # Heating circuit setpoint
+#     - ID_Ba_Hz_MK3_akt          # Mixed circuit 3 mode

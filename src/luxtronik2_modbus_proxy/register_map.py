@@ -28,11 +28,43 @@ Usage:
 
 from __future__ import annotations
 
+import difflib
 from dataclasses import dataclass, field
 
 from luxtronik2_modbus_proxy.register_definitions.calculations import INPUT_REGISTERS, CalculationDef
-from luxtronik2_modbus_proxy.register_definitions.parameters import HOLDING_REGISTERS, ParameterDef
+from luxtronik2_modbus_proxy.register_definitions.parameters import HOLDING_REGISTERS, NAME_TO_INDEX, ParameterDef
 from luxtronik2_modbus_proxy.register_definitions.visibilities import VISIBILITY_REGISTERS, VisibilityDef
+
+
+def resolve_parameter_names(names: list[str]) -> dict[int, ParameterDef]:
+    """Resolve a list of Luxtronik parameter names to their wire addresses.
+
+    Validates each name against the full NAME_TO_INDEX database. On unknown names,
+    uses fuzzy matching to provide a helpful 'Did you mean?' suggestion in the error.
+
+    This implements the T-02-04 mitigation: all user-supplied parameter names are
+    validated against the database at startup before any network activity.
+
+    Args:
+        names: List of Luxtronik symbolic parameter names (e.g., ['ID_Einst_WK_akt']).
+
+    Returns:
+        Dict mapping wire address (int) to ParameterDef for each resolved name.
+
+    Raises:
+        ValueError: If any name is not found in NAME_TO_INDEX. Message includes
+            a 'Did you mean?' hint when close matches exist.
+    """
+    resolved: dict[int, ParameterDef] = {}
+    for name in names:
+        if name in NAME_TO_INDEX:
+            address = NAME_TO_INDEX[name]
+            resolved[address] = HOLDING_REGISTERS[address]
+        else:
+            suggestions = difflib.get_close_matches(name, NAME_TO_INDEX.keys(), n=3, cutoff=0.6)
+            hint = f" Did you mean: {', '.join(suggestions)}?" if suggestions else ""
+            raise ValueError(f"Unknown parameter name '{name}'.{hint}")
+    return resolved
 
 
 @dataclass
@@ -84,8 +116,19 @@ class RegisterMap:
     # Total: 1355 slots (addresses 0-1354).
     INPUT_BLOCK_SIZE: int = 1355
 
-    def __init__(self) -> None:
-        """Build internal lookup dictionaries from the full register definitions."""
+    def __init__(self, extra_param_names: list[str] | None = None) -> None:
+        """Build internal lookup dictionaries from the full register definitions.
+
+        Args:
+            extra_param_names: Optional list of Luxtronik symbolic parameter names
+                to expose as additional holding registers beyond the curated defaults.
+                Names are validated at init time; invalid names raise ValueError.
+                If None or empty, only curated defaults are exposed.
+
+        Raises:
+            ValueError: If any name in extra_param_names is not a known Luxtronik
+                parameter name. Includes a 'Did you mean?' hint when close matches exist.
+        """
         # Build holding register lookup: address -> RegisterEntry (1,126 entries).
         self._holding: dict[int, RegisterEntry] = {}
         for address, param_def in HOLDING_REGISTERS.items():
@@ -99,6 +142,22 @@ class RegisterMap:
                 min_value=param_def.min_value,
                 max_value=param_def.max_value,
             )
+
+        # Resolve extra user-specified parameter names and merge into holding lookup.
+        # Curated defaults (already in self._holding) take precedence: skip duplicates.
+        extra_params = resolve_parameter_names(extra_param_names or [])
+        for address, param_def in extra_params.items():
+            if address not in self._holding:
+                self._holding[address] = RegisterEntry(
+                    address=address,
+                    luxtronik_id=param_def.luxtronik_id,
+                    name=param_def.name,
+                    data_type=param_def.data_type,
+                    writable=param_def.writable,
+                    allowed_values=param_def.allowed_values,
+                    min_value=param_def.min_value,
+                    max_value=param_def.max_value,
+                )
 
         # Build input register lookup: address -> RegisterEntry (251 entries, 0-259).
         self._input: dict[int, RegisterEntry] = {}
