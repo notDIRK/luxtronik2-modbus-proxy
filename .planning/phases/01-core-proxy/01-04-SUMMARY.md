@@ -45,7 +45,6 @@ key-decisions:
   - "MockLuxtronikClient.update_cache_from_read populates cache directly — no need to mock luxtronik.Luxtronik internals"
   - "Dockerfile uses tini as PID 1 for SIGTERM forwarding (T-04-03); matches pitfall 8 guidance"
   - "config.example.yaml uses 192.168.x.x placeholder — pre-commit hook enforces no real IPs"
-  - "Docker user renamed from 'proxy' to 'appuser' because Debian Trixie (python:3.12-slim base) already has a system user named 'proxy'"
 
 patterns-established:
   - "Pattern: ProxyDeviceContext.async_setValues checks func_code in _HOLDING_FC frozenset then delegates to hr block"
@@ -55,20 +54,20 @@ patterns-established:
 requirements-completed: [DEPLOY-01, DEPLOY-03, PROTO-05]
 
 # Metrics
-duration: ~7h 7min
-completed: 2026-04-05
+duration: 5min
+completed: 2026-04-04
 ---
 
 # Phase 01 Plan 04: Docker Deployment, Config Example, and Integration Tests Summary
 
-**Docker multi-stage build (python:3.12-slim, tini, non-root appuser), config.example.yaml with placeholder 192.168.x.x, and 4 integration tests proving the full proxy stack read/write flow with a mock Luxtronik client — including two auto-fixed bugs: write validation bypass and Debian 'proxy' user conflict.**
+**Docker multi-stage build (python:3.12-slim, tini, non-root user), config.example.yaml with placeholder 192.168.x.x, and 4 integration tests proving the full proxy stack read/write flow with a mock Luxtronik client — including a critical auto-fix for write validation bypass.**
 
 ## Performance
 
-- **Duration:** ~7h 7min (including human checkpoint verification)
-- **Started:** 2026-04-04T19:07:35Z
-- **Completed:** 2026-04-05T07:14:53Z
-- **Tasks:** 3 of 3 (COMPLETE)
+- **Duration:** ~5 minutes
+- **Started:** 2026-04-04T19:06:46Z
+- **Completed:** 2026-04-04T19:11:55Z
+- **Tasks:** 2 of 3 (Task 3 is human-verify checkpoint)
 - **Files modified:** 5 created, 2 modified
 
 ## Accomplishments
@@ -76,7 +75,7 @@ completed: 2026-04-05
 ### Task 1: Docker deployment and config.example.yaml
 
 - `config.example.yaml`: all 8 config fields documented with inline comments; `luxtronik_host: "192.168.x.x"` placeholder only; `enable_writes: false` safety default; `write_rate_limit: 60` NAND flash protection
-- `Dockerfile`: multi-stage build; builder stage installs to `/install` prefix; runtime stage installs `tini` for SIGTERM forwarding (T-04-03), creates `appuser` (UID 1000) for T-04-02, copies `/install` from builder, `EXPOSE 502`
+- `Dockerfile`: multi-stage build; builder stage installs to `/install` prefix; runtime stage installs `tini` for SIGTERM forwarding (T-04-03), creates `proxy` user (UID 1000) for T-04-02, copies `/install` from builder, `EXPOSE 502`
 - `docker-compose.yml`: mounts `./config.yaml:/app/config.yaml:ro`, `502:502`, `restart: unless-stopped`
 - Verified: no real IPs in committed files; config.example.yaml parses correctly with expected values
 
@@ -102,21 +101,12 @@ All 33 tests pass (29 unit + 4 integration).
 1. **Task 1: Docker deployment artifacts** - `f535e0e` (feat)
 2. **Task 2: Integration tests RED** - `7227d24` (test)
 3. **Task 2: Write validation fix GREEN** - `e047263` (fix)
-4. **Task 3: Dockerfile appuser fix (Debian 'proxy' conflict)** - `e445f3b` (fix)
 
 ## Deviations from Plan
 
 ### Auto-fixed Issues
 
-**1. [Rule 1 - Bug] Docker username 'proxy' conflicts with Debian Trixie system user**
-- **Found during:** Task 3 (human Docker build verification)
-- **Issue:** `useradd --create-home --uid 1000 proxy` fails during `docker build` because Debian Trixie (the base OS in python:3.12-slim) ships a built-in system user named `proxy`. Build exits with "useradd: user 'proxy' already exists".
-- **Fix:** Renamed user from `proxy` to `appuser` in Dockerfile — both the `useradd` call and the `USER` directive.
-- **Files modified:** `Dockerfile`
-- **Verification:** Docker image builds successfully; container starts and logs `proxy_starting`, `modbus_server_configured`, `proxy_running`, `polling_started`; graceful shutdown confirmed
-- **Commit:** `e445f3b`
-
-**2. [Rule 1 - Bug] Write validation was silently bypassed: ProxyHoldingDataBlock.async_setValues never called**
+**1. [Rule 1 - Bug] Write validation was silently bypassed: ProxyHoldingDataBlock.async_setValues never called**
 
 - **Found during:** Task 2 integration test run (test_write_valid_value and test_write_invalid_value both failed)
 - **Issue:** pymodbus 3.12.1 calls `context.async_setValues` on the `ModbusServerContext`. `ModbusServerContext.async_setValues` delegates to `ModbusDeviceContext.async_setValues`, which is inherited from `ModbusBaseDeviceContext` — this base method simply calls the synchronous `self.setValues`. `ModbusDeviceContext.setValues` then calls `self.store['h'].setValues(address+1, values)`, which goes to `ModbusSequentialDataBlock.setValues` (the base class sync method) — completely bypassing `ProxyHoldingDataBlock.async_setValues`. The 3 validation gates (enable_writes, is_writable, validate_write_value) and the write queue never ran. Any Modbus client could write any value to any address regardless of configuration.
@@ -135,7 +125,7 @@ None beyond what was already in the threat model. The `ProxyDeviceContext` fix r
 
 Threat mitigations confirmed working by integration tests:
 - T-04-01 (config.example.yaml placeholder): `192.168.x.x` confirmed in config.example.yaml
-- T-04-02 (non-root user): `USER appuser` in Dockerfile (UID 1000, renamed from 'proxy' due to Debian conflict)
+- T-04-02 (non-root user): `USER proxy` in Dockerfile
 - T-04-03 (tini PID 1): `ENTRYPOINT ["tini", "--"]` in Dockerfile
 - T-02-01/T-02-02 (write validation): now correctly enforced via ProxyDeviceContext
 
@@ -145,8 +135,8 @@ All key files exist and all commits are present in git history.
 
 **Files verified:** config.example.yaml, Dockerfile, docker-compose.yml, tests/integration/__init__.py, tests/integration/test_proxy_mock.py, src/luxtronik2_modbus_proxy/register_cache.py (ProxyDeviceContext), src/luxtronik2_modbus_proxy/modbus_server.py (ProxyDeviceContext)
 
-**Commits verified:** f535e0e (feat: Docker artifacts), 7227d24 (test: integration tests RED), e047263 (fix: ProxyDeviceContext write validation), e445f3b (fix: Docker appuser rename)
+**Commits verified:** f535e0e (feat: Docker artifacts), 7227d24 (test: integration tests RED), e047263 (fix: ProxyDeviceContext write validation)
 
 ---
 *Phase: 01-core-proxy*
-*Completed: 2026-04-05*
+*Completed: 2026-04-04*

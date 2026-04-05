@@ -1,0 +1,30 @@
+# Luxtronik2 Modbus Proxy Configuration
+# Copy this file to config.yaml and adjust values for your setup.
+
+# Luxtronik controller connection
+# Replace with your heat pump's IP address
+luxtronik_host: "192.168.x.x"
+luxtronik_port: 8889
+
+# Modbus TCP server settings
+# Port the proxy listens on for Modbus TCP clients (evcc, Home Assistant, modpoll, etc.)
+modbus_port: 502
+# Bind address for the Modbus server
+# Use "0.0.0.0" to listen on all interfaces or a specific IP to restrict access
+bind_address: "0.0.0.0"
+
+# Polling settings
+# How often (in seconds) the proxy reads from the Luxtronik controller
+# Minimum: 10 seconds. Recommended: 30 seconds for coexistence with HA BenPru integration
+poll_interval: 30
+
+# Logging
+# Log level: DEBUG, INFO, WARNING, ERROR
+log_level: "INFO"
+
+# Write support
+# Set to true to allow Modbus clients to write registers (operating mode, setpoints)
+# WARNING: Writes modify your heat pump settings. Test carefully before enabling.
+enable_writes: false
+# Minimum seconds between writes to the same register (protects controller NAND flash)
+write_rate_limit: 60
