@@ -80,6 +80,12 @@ class PollingEngine:
         # Value: float timestamp from time.time() of the last accepted write.
         self._write_timestamps: dict[int, float] = {}
 
+        # Visibility poll-once optimization (Pitfall 6): visibilities are static UI
+        # display flags that do not change during normal operation. After the first
+        # successful poll, skip_visibilities=True is passed to update_cache_from_read
+        # to avoid 355 unnecessary cache writes per cycle.
+        self._visibilities_loaded: bool = False
+
         self._log = structlog.get_logger().bind(component="polling_engine")
 
     async def run_forever(self) -> None:
@@ -145,7 +151,19 @@ class PollingEngine:
                 lux = await self._client.async_read()
 
                 # Step 3: Update the in-memory register cache with the fresh values.
-                self._client.update_cache_from_read(lux, self._cache)
+                # Pass skip_visibilities=True after the first successful poll to avoid
+                # 355 unnecessary cache writes per cycle (visibility poll-once, Pitfall 6).
+                self._client.update_cache_from_read(
+                    lux, self._cache, skip_visibilities=self._visibilities_loaded
+                )
+
+                # Mark visibilities as loaded after the first successful read.
+                if not self._visibilities_loaded:
+                    self._visibilities_loaded = True
+                    self._log.info(
+                        "visibilities_loaded",
+                        count=len(self._client._register_map.all_visibility_addresses()),
+                    )
 
                 # Step 4: Mark the cache fresh — clients can trust the values.
                 self._cache.mark_fresh()

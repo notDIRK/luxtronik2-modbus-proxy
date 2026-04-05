@@ -148,23 +148,33 @@ class LuxtronikClient:
         log.info("luxtronik_write_complete")
 
     def update_cache_from_read(
-        self, lux: luxtronik.Luxtronik, cache: "RegisterCache"
+        self,
+        lux: luxtronik.Luxtronik,
+        cache: "RegisterCache",
+        skip_visibilities: bool = False,
     ) -> None:
         """Extract mapped register values from a Luxtronik read result and update cache.
 
-        Iterates over all mapped holding and input register addresses, extracts the
-        corresponding parameter or calculation value from the Luxtronik instance, and
-        stores the raw integer (heatpump-format) value in the register cache.
+        Iterates over all mapped holding, input, and visibility register addresses,
+        extracts the corresponding value from the Luxtronik instance, and stores the
+        raw integer (heatpump-format) value in the register cache.
 
         The raw integer value is used because Modbus holding and input registers
         are 16-bit integers. Converted values (e.g., floating-point Celsius) would
         lose precision when stored as integers. The Modbus client is responsible for
         applying any scaling defined in its device configuration.
 
+        Visibility optimization: Visibilities are static UI display flags that do not
+        change during normal operation. The caller (PollingEngine) passes
+        ``skip_visibilities=True`` after the first successful poll to avoid 355
+        unnecessary cache writes per cycle (Pitfall 6).
+
         Args:
             lux: Populated ``luxtronik.Luxtronik`` instance from a completed ``async_read()``
                 call. Must not be reused after this call.
             cache: Register cache to update with the freshly read values.
+            skip_visibilities: If True, skip updating visibility registers in the cache.
+                Use after the first successful poll since visibilities rarely change.
         """
         log = logger.bind(host=self._host)
 
@@ -236,4 +246,30 @@ class LuxtronikClient:
                 register=address,
                 calc_name=entry.name,
                 value=int(raw_value),
+            )
+
+        # Update input registers for visibilities (read-only, mapped at wire address = index + 1000).
+        # Skipped after the first successful poll since visibilities rarely change (Pitfall 6).
+        if not skip_visibilities:
+            visi_count = 0
+            for address in self._register_map.all_visibility_addresses():
+                entry = self._register_map.get_visibility_entry(address)
+                if entry is None:
+                    continue
+
+                # Wire address = lux_index + 1000, so lux_index = wire_address - 1000.
+                lux_index = address - 1000
+                visi = lux.visibilities.visibilities.get(lux_index)
+                if visi is None:
+                    continue
+
+                # Visibility values are Unknown type; value is 0 (hidden) or 1 (visible).
+                # Use to_heatpump to get the raw integer; fall back to 0 if None.
+                raw_value = visi.to_heatpump(visi.value) if visi.value is not None else 0
+                cache.update_input_values(address, [int(raw_value) if raw_value is not None else 0])
+                visi_count += 1
+
+            log.debug(
+                "cache_visibilities_updated",
+                count=visi_count,
             )
