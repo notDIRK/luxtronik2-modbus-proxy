@@ -48,9 +48,9 @@ Plans:
 **Plans:** 3 plans
 
 Plans:
-- [ ] 02-01-PLAN.md — Full parameter/calculation/visibility databases and RegisterMap extension
-- [ ] 02-02-PLAN.md — User-selectable parameters via config, fuzzy validation, list-params CLI
-- [ ] 02-03-PLAN.md — SG-ready virtual register, evcc integration docs, HA coexistence docs
+- [x] 02-01-PLAN.md — Full parameter/calculation/visibility databases and RegisterMap extension
+- [x] 02-02-PLAN.md — User-selectable parameters via config, fuzzy validation, list-params CLI
+- [x] 02-03-PLAN.md — SG-ready virtual register, evcc integration docs, HA coexistence docs
 
 ### Phase 3: Documentation and Release
 **Goal**: A non-technical user can install, configure, and validate the proxy from published documentation alone, in either English or German, without needing to read source code
