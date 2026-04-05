@@ -17,8 +17,8 @@ FROM python:3.12-slim
 RUN apt-get update && apt-get install -y --no-install-recommends tini \
     && rm -rf /var/lib/apt/lists/*
 
-# Create non-root user
-RUN useradd --create-home --uid 1000 proxy
+# Create non-root user (name 'proxy' conflicts with Debian system user)
+RUN useradd --create-home --uid 1000 appuser
 
 WORKDIR /app
 
@@ -28,7 +28,7 @@ COPY --from=builder /install /usr/local
 # Default config path (user mounts their config.yaml here)
 ENV LUXTRONIK_CONFIG_PATH=/app/config.yaml
 
-USER proxy
+USER appuser
 
 EXPOSE 502
 
