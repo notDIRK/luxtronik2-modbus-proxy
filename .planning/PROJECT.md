@@ -97,4 +97,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-04-05 after Phase 1 completion*
+*Last updated: 2026-04-05 after Phase 2 completion — full register database (1,126 params, 251 calcs, 355 visibilities), user config with fuzzy validation, SG-ready virtual register, evcc/HA integration docs*
