@@ -92,7 +92,8 @@ async def main(config_path: str | None = None) -> None:
 
     # Step 3: Create components in dependency order.
     # register_map provides address lookup, writability, and value validation.
-    register_map = RegisterMap()
+    # Pass user-selected parameter names from config for dynamic register loading.
+    register_map = RegisterMap(extra_param_names=config.registers.parameters)
 
     # write_queue connects ProxyHoldingDataBlock (producer) to PollingEngine (consumer).
     write_queue: asyncio.Queue = asyncio.Queue()
