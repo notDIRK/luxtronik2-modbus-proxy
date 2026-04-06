@@ -17,6 +17,9 @@ Owners of Luxtronik 2.0 heat pumps can integrate them into evcc and modern energ
 - [x] Curated default register set (evcc/HA essentials: temps, operating mode, SG-ready, power) — Validated in Phase 1: Core Proxy
 - [x] Docker container deployment — Validated in Phase 1: Core Proxy
 - [x] Structured logging for development debugging and runtime diagnostics — Validated in Phase 1: Core Proxy
+- [x] systemd service deployment — Validated in Phase 3: Documentation and Release
+- [x] Bilingual documentation (EN + DE), two tracks (developer quickstart + end-user guide) — Validated in Phase 3: Documentation and Release
+- [x] GitHub Pages project homepage — Validated in Phase 3: Documentation and Release
 
 ### Active
 
@@ -24,9 +27,6 @@ Owners of Luxtronik 2.0 heat pumps can integrate them into evcc and modern energ
 - [ ] Curated default register set expansion (full mapping database of all 1,126 parameters)
 - [ ] Built-in mapping database of all 1,126 parameters, browsable/selectable via config
 - [ ] evcc integration: manual docs first, then upstream PR when stable
-- [ ] systemd service deployment
-- [ ] Bilingual documentation (EN + DE), two tracks (developer quickstart + end-user guide)
-- [ ] GitHub Pages project homepage
 - [ ] Community announcements (evcc, HA forum, haustechnikdialog.de)
 
 ### Out of Scope
@@ -97,4 +97,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-04-05 after Phase 2 completion — full register database (1,126 params, 251 calcs, 355 visibilities), user config with fuzzy validation, SG-ready virtual register, evcc/HA integration docs*
+*Last updated: 2026-04-06 after Phase 3 completion — bilingual documentation (EN+DE), MkDocs site with Material theme, GitHub Actions deployment, systemd service, README files with badges and architecture diagram*
