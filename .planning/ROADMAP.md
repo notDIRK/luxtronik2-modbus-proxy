@@ -61,7 +61,13 @@ Plans:
   2. A developer can follow the quickstart guide (EN) to clone, build, and run the proxy against a test controller in under 15 minutes
   3. The GitHub Pages homepage clearly explains what the project does, who it is for, and links to both language tracks of the documentation
   4. README.md and README.de.md give an accurate project overview and architecture description that match the shipped v1 behavior
-**Plans**: TBD
+**Plans:** 4 plans
+
+Plans:
+- [ ] 03-01-PLAN.md — MkDocs scaffold, i18n config, homepage content, GitHub Actions workflow
+- [ ] 03-02-PLAN.md — EN documentation: quickstart, user guide, systemd guide, service file
+- [ ] 03-03-PLAN.md — DE translations of all documentation files
+- [ ] 03-04-PLAN.md — README.md and README.de.md with badges, architecture diagram, links
 
 ## Progress
 
@@ -72,4 +78,4 @@ Phases execute in numeric order: 1 → 2 → 3
 |-------|----------------|--------|-----------|
 | 1. Core Proxy | 4/4 | Complete | - |
 | 2. Integration-Ready Register Map | 0/3 | Planned | - |
-| 3. Documentation and Release | 0/TBD | Not started | - |
+| 3. Documentation and Release | 0/4 | Planned | - |
