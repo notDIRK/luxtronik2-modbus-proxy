@@ -1,0 +1,46 @@
+site_name: luxtronik2-modbus-proxy
+site_url: https://OWNER.github.io/PUBLIC-luxtronik2-modbus-proxy/  # TODO: Replace OWNER with your GitHub username
+site_description: Modbus TCP proxy for Luxtronik 2.0 heat pump controllers
+repo_url: https://github.com/OWNER/PUBLIC-luxtronik2-modbus-proxy  # TODO: Replace OWNER with your GitHub username
+repo_name: PUBLIC-luxtronik2-modbus-proxy
+docs_dir: docs
+
+theme:
+  name: material
+  palette:
+    - scheme: default
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - scheme: slate
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - toc.integrate
+    - search.suggest
+    - content.code.copy
+
+plugins:
+  - search
+  - i18n:
+      docs_structure: folder
+      reconfigure_material: true
+      languages:
+        - locale: en
+          default: true
+          name: English
+          build: true
+        - locale: de
+          name: Deutsch
+          build: true
+
+nav:
+  - Home: index.md
+  - Quick Start: quickstart.md
+  - User Guide: user-guide.md
+  - evcc Integration: evcc-integration.md
+  - HA Coexistence: ha-coexistence.md
+  - systemd Service: systemd.md
