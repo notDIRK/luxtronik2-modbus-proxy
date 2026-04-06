@@ -64,10 +64,10 @@ Plans:
 **Plans:** 4 plans
 
 Plans:
-- [ ] 03-01-PLAN.md — MkDocs scaffold, i18n config, homepage content, GitHub Actions workflow
-- [ ] 03-02-PLAN.md — EN documentation: quickstart, user guide, systemd guide, service file
-- [ ] 03-03-PLAN.md — DE translations of all documentation files
-- [ ] 03-04-PLAN.md — README.md and README.de.md with badges, architecture diagram, links
+- [x] 03-01-PLAN.md — MkDocs scaffold, i18n config, homepage content, GitHub Actions workflow
+- [x] 03-02-PLAN.md — EN documentation: quickstart, user guide, systemd guide, service file
+- [x] 03-03-PLAN.md — DE translations of all documentation files
+- [x] 03-04-PLAN.md — README.md and README.de.md with badges, architecture diagram, links
 
 ## Progress
 
