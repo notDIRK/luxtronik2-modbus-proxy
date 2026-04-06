@@ -1,0 +1,36 @@
+# luxtronik2-modbus-proxy systemd service file
+# Copy to /etc/systemd/system/ and adjust paths as needed.
+# Run: sudo systemctl daemon-reload && sudo systemctl enable --now luxtronik2-modbus-proxy
+
+[Unit]
+Description=Luxtronik 2.0 to Modbus TCP Proxy
+Documentation=https://github.com/OWNER/PUBLIC-luxtronik2-modbus-proxy
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=luxtronik-proxy
+Group=luxtronik-proxy
+
+# Config file path — adjust if you placed config.yaml elsewhere
+ExecStart=/usr/local/bin/luxtronik2-modbus-proxy --config /etc/luxtronik2-modbus-proxy/config.yaml
+
+# Optional: override config values via environment file
+# Create /etc/luxtronik2-modbus-proxy/env with KEY=VALUE pairs (LUXTRONIK_ prefix)
+EnvironmentFile=-/etc/luxtronik2-modbus-proxy/env
+
+Restart=on-failure
+RestartSec=10
+
+# Prevent restart loops on persistent config errors
+StartLimitIntervalSec=60
+StartLimitBurst=3
+
+# structlog JSON output goes to journald automatically
+# View with: journalctl -u luxtronik2-modbus-proxy -f
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target
