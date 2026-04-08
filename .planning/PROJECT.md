@@ -8,34 +8,47 @@ A Modbus TCP proxy for Luxtronik 2.0 heat pump controllers. Translates the propr
 
 Owners of Luxtronik 2.0 heat pumps can integrate them into evcc and modern energy management systems via standard Modbus TCP, without needing to understand the proprietary protocol or Modbus register numbers.
 
+## Current State (after v1.0)
+
+**Shipped:** v1.0 MVP on 2026-04-08
+**Codebase:** 3,439 LOC Python (2,248 src + 1,191 tests), 90 files
+**Tech stack:** Python 3.12, pymodbus 3.12.1, luxtronik 0.3.14, pydantic-settings, structlog, Docker
+**Timeline:** 2026-04-04 → 2026-04-06 (3 days)
+
 ## Requirements
 
 ### Validated
 
-- [x] Modbus TCP proxy translating binary protocol to Modbus registers (read + write) — Validated in Phase 1: Core Proxy
-- [x] Coexist with HA: proxy connects briefly, reads/writes, disconnects (configurable interval) — Validated in Phase 1: Core Proxy
-- [x] Curated default register set (evcc/HA essentials: temps, operating mode, SG-ready, power) — Validated in Phase 1: Core Proxy
-- [x] Docker container deployment — Validated in Phase 1: Core Proxy
-- [x] Structured logging for development debugging and runtime diagnostics — Validated in Phase 1: Core Proxy
-- [x] systemd service deployment — Validated in Phase 3: Documentation and Release
-- [x] Bilingual documentation (EN + DE), two tracks (developer quickstart + end-user guide) — Validated in Phase 3: Documentation and Release
-- [x] GitHub Pages project homepage — Validated in Phase 3: Documentation and Release
+- ✓ Modbus TCP proxy translating binary protocol to Modbus registers (read + write) — v1.0
+- ✓ Coexist with HA: connect-read/write-disconnect pattern with configurable polling interval — v1.0
+- ✓ Curated default register set (evcc/HA essentials: temps, operating mode, SG-ready, power) — v1.0
+- ✓ Full parameter database (1,126 params, 251 calculations, 355 visibilities), selectable by name — v1.0
+- ✓ SG-ready virtual register mapping evcc modes 0-3 to Luxtronik parameter combinations — v1.0
+- ✓ Write validation with range checks, writability enforcement, and NAND flash rate limiting — v1.0
+- ✓ Docker container deployment (multi-stage, non-root, tini) — v1.0
+- ✓ systemd service deployment — v1.0
+- ✓ Structured logging (structlog, JSON/console) — v1.0
+- ✓ Bilingual documentation (EN + DE), two tracks (developer quickstart + end-user guide) — v1.0
+- ✓ GitHub Pages project homepage (MkDocs Material) — v1.0
+- ✓ evcc YAML configuration snippet with documentation — v1.0
+- ✓ HA coexistence documentation — v1.0
 
 ### Active
 
-- [ ] Home Assistant integration via BenPru/luxtronik HACS (config, automations, Tibber)
-- [ ] Curated default register set expansion (full mapping database of all 1,126 parameters)
-- [ ] Built-in mapping database of all 1,126 parameters, browsable/selectable via config
-- [ ] evcc integration: manual docs first, then upstream PR when stable
-- [ ] Community announcements (evcc, HA forum, haustechnikdialog.de)
+- [ ] evcc upstream heater template PR (after community validation)
+- [ ] Home Assistant integration via HACS custom component
+- [ ] Health/status HTTP endpoint for monitoring
+- [ ] Prometheus metrics endpoint
+- [ ] Community announcements (evcc forum, HA forum, haustechnikdialog.de)
 
 ### Out of Scope
 
-- Weather-forecast-based optimization — v2 feature, not needed for core proxy
-- Alerting on errors — v2 feature
+- Weather-forecast-based optimization — v2+ feature, not needed for core proxy
+- Alerting on connection failures — depends on metrics endpoint (Active)
 - Claude skill for natural language control — private repo only, not published here
 - Firmware upgrade/modification — hardware limitation, not possible
 - OAuth/authentication on proxy — local network only, unnecessary complexity
+- Persistent Luxtronik connection — breaks HA coexistence, violates single-connection constraint
 
 ## Context
 
@@ -72,12 +85,14 @@ The Luxtronik controller handles only one TCP connection at a time. The proxy us
 
 | Decision | Rationale | Outcome |
 |----------|-----------|---------|
-| Coexist with HA via polling (not replace) | User runs BenPru/luxtronik HACS alongside proxy | — Pending |
-| Configurable polling interval | Different users have different latency needs | — Pending |
-| Read + write in v1 | evcc needs to switch modes (SG-ready, hot water boost) | — Pending |
-| Curated default + full mapping DB | Users browse/select params by name, not register numbers | — Pending |
-| Docs first, then evcc upstream PR | Stabilize before contributing to evcc repo | — Pending |
-| Logging in v1 | Essential for development debugging and proxy validation | — Pending |
+| Coexist with HA via polling (not replace) | User runs BenPru/luxtronik HACS alongside proxy | ✓ Good — connect-per-call pattern works reliably |
+| Configurable polling interval | Different users have different latency needs | ✓ Good — default 30s, configurable in YAML |
+| Read + write in v1 | evcc needs to switch modes (SG-ready, hot water boost) | ✓ Good — write validation + rate limiting protect controller |
+| Curated default + full mapping DB | Users browse/select params by name, not register numbers | ✓ Good — 1,126 params browsable, list-params CLI added |
+| Docs first, then evcc upstream PR | Stabilize before contributing to evcc repo | ✓ Good — v1 shipped with docs, upstream PR deferred to v2 |
+| Logging in v1 | Essential for development debugging and proxy validation | ✓ Good — structlog with JSON/console output |
+| SG-ready virtual register at address 5000 | evcc uses integer 0-3 for SG-ready modes | ✓ Good — needs hardware validation of mode mappings |
+| MkDocs Material for docs site | Modern, i18n-capable, GitHub Pages compatible | ✓ Good — bilingual EN/DE site deployed |
 
 ## Evolution
 
@@ -97,4 +112,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-04-06 after Phase 3 completion — bilingual documentation (EN+DE), MkDocs site with Material theme, GitHub Actions deployment, systemd service, README files with badges and architecture diagram*
+*Last updated: 2026-04-08 after v1.0 milestone — full MVP shipped: async Modbus TCP proxy, write validation, SG-ready, full parameter DB, Docker + systemd, bilingual docs, MkDocs site*
