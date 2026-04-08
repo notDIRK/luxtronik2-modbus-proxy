@@ -8,6 +8,17 @@ A Modbus TCP proxy for Luxtronik 2.0 heat pump controllers. Translates the propr
 
 Owners of Luxtronik 2.0 heat pumps can integrate them into evcc and modern energy management systems via standard Modbus TCP, without needing to understand the proprietary protocol or Modbus register numbers.
 
+## Current Milestone: v1.1 HACS Integration
+
+**Goal:** Luxtronik 2.0 Wärmepumpe als native Home Assistant Integration über HACS installierbar — IP eingeben, fertig, Werte sehen.
+
+**Target features:**
+- HACS Custom Integration (installierbar über HACS Store)
+- Config Flow: IP-Adresse eingeben, Integration eingerichtet
+- Sensor-Entitäten für Temperaturen, Betriebsmodus, Leistung etc.
+- Kein separater Proxy-Container nötig — direkte Kommunikation mit WP
+- Nutzt bestehenden v1.0 Proxy-Code (luxtronik client, register map, write validation) als Library
+
 ## Current State (after v1.0)
 
 **Shipped:** v1.0 MVP on 2026-04-08
@@ -112,4 +123,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-04-08 after v1.0 milestone — full MVP shipped: async Modbus TCP proxy, write validation, SG-ready, full parameter DB, Docker + systemd, bilingual docs, MkDocs site*
+*Last updated: 2026-04-08 after starting v1.1 milestone — HACS Custom Integration*
