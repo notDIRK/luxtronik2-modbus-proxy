@@ -73,9 +73,10 @@ None.
 | # | Description | Date | Commit | Directory |
 |---|-------------|------|--------|-----------|
 | 260409-l1l | Add Options Flow to reconfigure IP address and host settings in HA | 2026-04-09 | da8f155 | [260409-l1l-add-options-flow-to-reconfigure-ip-addre](./quick/260409-l1l-add-options-flow-to-reconfigure-ip-addre/) |
+| 260409-m53 | Add parameter backup button and backup viewer to HA integration | 2026-04-09 | df0995f | [260409-m53-add-parameter-backup-button-and-backup-v](./quick/260409-m53-add-parameter-backup-button-and-backup-v/) |
 
 ## Session Continuity
 
 Last session: 2026-04-09
-Stopped at: Quick task 260409-l1l completed
-Resume file: .planning/quick/260409-l1l-add-options-flow-to-reconfigure-ip-addre/260409-l1l-SUMMARY.md
+Stopped at: Quick task 260409-m53 completed
+Resume file: .planning/quick/260409-m53-add-parameter-backup-button-and-backup-v/260409-m53-SUMMARY.md
