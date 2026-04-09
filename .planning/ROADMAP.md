@@ -34,7 +34,10 @@
   2. HACS can add the repository as a custom integration without validation errors
   3. GitHub Actions validate.yml runs the HACS action on every push and reports pass/fail
   4. `hacs.json`, `manifest.json`, `const.py`, and brand icon exist and are schema-valid
-**Plans**: TBD
+**Plans:** 2 plans
+Plans:
+- [ ] 04-01-PLAN.md — Version bump to 1.1.0, PyPI metadata, and trusted publishing workflow
+- [ ] 04-02-PLAN.md — HACS integration skeleton (hacs.json, manifest, const, icon) and CI validation workflow
 **UI hint**: yes
 
 ### Phase 5: Coordinator & Config Flow
@@ -82,7 +85,7 @@
 | 1. Core Proxy | v1.0 | 4/4 | Complete | 2026-04-05 |
 | 2. Integration-Ready Register Map | v1.0 | 3/3 | Complete | 2026-04-06 |
 | 3. Documentation and Release | v1.0 | 4/4 | Complete | 2026-04-06 |
-| 4. PyPI Publish & HACS Scaffold | v1.1 | 0/? | Not started | - |
+| 4. PyPI Publish & HACS Scaffold | v1.1 | 0/2 | Not started | - |
 | 5. Coordinator & Config Flow | v1.1 | 0/? | Not started | - |
 | 6. Sensor Entities | v1.1 | 0/? | Not started | - |
 | 7. Control Entities & Translations | v1.1 | 0/? | Not started | - |
