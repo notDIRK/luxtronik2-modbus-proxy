@@ -19,12 +19,15 @@ Owners of Luxtronik 2.0 heat pumps can integrate them into evcc and modern energ
 - Kein separater Proxy-Container nötig — direkte Kommunikation mit WP
 - Nutzt bestehenden v1.0 Proxy-Code (luxtronik client, register map, write validation) als Library
 
-## Current State (after v1.0)
+## Current State (after Phase 4)
 
 **Shipped:** v1.0 MVP on 2026-04-08
-**Codebase:** 3,439 LOC Python (2,248 src + 1,191 tests), 90 files
+**Phase 4 complete:** 2026-04-09 — PyPI package prepared (v1.1.0), HACS integration skeleton created
+**Codebase:** 3,439 LOC Python (2,248 src + 1,191 tests), 90 files + HACS scaffold
 **Tech stack:** Python 3.12, pymodbus 3.12.1, luxtronik 0.3.14, pydantic-settings, structlog, Docker
-**Timeline:** 2026-04-04 → 2026-04-06 (3 days)
+**Timeline:** 2026-04-04 → 2026-04-06 (v1.0), 2026-04-09 (Phase 4)
+**PyPI:** Package build verified (v1.1.0), trusted publishing workflow ready, pending publisher setup required
+**HACS:** Skeleton complete (hacs.json, manifest.json, const.py, brand icon, validate.yml)
 
 ## Requirements
 
@@ -123,4 +126,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-04-08 after starting v1.1 milestone — HACS Custom Integration*
+*Last updated: 2026-04-09 after Phase 4 completion — PyPI Publish & HACS Scaffold*
