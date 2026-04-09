@@ -68,8 +68,14 @@ None.
 
 - SG-ready mode parameter ID combinations (HeatingMode + HotWaterMode for modes 0-3) need hardware validation against actual Alpha Innotec MSW 14 — carry-over from v1.0
 
+### Quick Tasks Completed
+
+| # | Description | Date | Commit | Directory |
+|---|-------------|------|--------|-----------|
+| 260409-l1l | Add Options Flow to reconfigure IP address and host settings in HA | 2026-04-09 | da8f155 | [260409-l1l-add-options-flow-to-reconfigure-ip-addre](./quick/260409-l1l-add-options-flow-to-reconfigure-ip-addre/) |
+
 ## Session Continuity
 
-Last session: 2026-04-09T13:29:19.291Z
-Stopped at: Phase 7 context gathered (assumptions mode)
-Resume file: .planning/phases/07-control-entities-translations/07-CONTEXT.md
+Last session: 2026-04-09
+Stopped at: Quick task 260409-l1l completed
+Resume file: .planning/quick/260409-l1l-add-options-flow-to-reconfigure-ip-addre/260409-l1l-SUMMARY.md
