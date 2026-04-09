@@ -4,14 +4,14 @@ milestone: v1.0
 milestone_name: milestone
 status: executing
 stopped_at: Phase 5 UI-SPEC approved
-last_updated: "2026-04-09T06:51:31.108Z"
-last_activity: 2026-04-09 -- Phase 5 planning complete
+last_updated: "2026-04-09T07:04:01.738Z"
+last_activity: 2026-04-09
 progress:
   total_phases: 4
-  completed_phases: 1
+  completed_phases: 2
   total_plans: 4
-  completed_plans: 2
-  percent: 50
+  completed_plans: 4
+  percent: 100
 ---
 
 # Project State
@@ -21,14 +21,14 @@ progress:
 See: .planning/PROJECT.md (updated 2026-04-08)
 
 **Core value:** Owners of Luxtronik 2.0 heat pumps can integrate them into evcc and modern energy management systems via standard Modbus TCP, without needing to understand the proprietary protocol or Modbus register numbers.
-**Current focus:** Phase 04 — PyPI Publish & HACS Scaffold
+**Current focus:** Phase 05 — coordinator-config-flow
 
 ## Current Position
 
-Phase: 5
+Phase: 6
 Plan: Not started
-Status: Ready to execute
-Last activity: 2026-04-09 -- Phase 5 planning complete
+Status: Executing Phase 05
+Last activity: 2026-04-09
 
 Progress: [░░░░░░░░░░░░░░░░░░░░] 0%
 

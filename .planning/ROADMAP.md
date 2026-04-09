@@ -52,8 +52,8 @@ Plans:
   5. Two simultaneous write+read calls do not produce a connection error (asyncio.Lock serializes them)
 **Plans:** 2 plans
 Plans:
-- [ ] 05-01-PLAN.md — LuxtronikCoordinator with connect-per-call, executor dispatch, asyncio.Lock
-- [ ] 05-02-PLAN.md — Config flow (IP entry, connection test, BenPru conflict), __init__.py wiring, manifest update
+- [x] 05-01-PLAN.md — LuxtronikCoordinator with connect-per-call, executor dispatch, asyncio.Lock
+- [x] 05-02-PLAN.md — Config flow (IP entry, connection test, BenPru conflict), __init__.py wiring, manifest update
 **UI hint**: yes
 
 ### Phase 6: Sensor Entities
