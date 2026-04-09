@@ -77,31 +77,31 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| SETUP-01 | - | Pending |
-| SETUP-02 | - | Pending |
-| SETUP-03 | - | Pending |
-| SETUP-04 | - | Pending |
-| SENS-01 | - | Pending |
-| SENS-02 | - | Pending |
-| SENS-03 | - | Pending |
-| SENS-04 | - | Pending |
-| CTRL-01 | - | Pending |
-| CTRL-02 | - | Pending |
-| CTRL-03 | - | Pending |
-| CTRL-04 | - | Pending |
-| HACS-01 | - | Pending |
-| HACS-02 | - | Pending |
-| HACS-03 | - | Pending |
-| HACS-04 | - | Pending |
-| ARCH-01 | - | Pending |
-| ARCH-02 | - | Pending |
-| ARCH-03 | - | Pending |
+| HACS-04 | Phase 4 | Pending |
+| HACS-01 | Phase 4 | Pending |
+| HACS-03 | Phase 4 | Pending |
+| ARCH-01 | Phase 5 | Pending |
+| ARCH-02 | Phase 5 | Pending |
+| ARCH-03 | Phase 5 | Pending |
+| SETUP-02 | Phase 5 | Pending |
+| SETUP-03 | Phase 5 | Pending |
+| SETUP-04 | Phase 5 | Pending |
+| SETUP-01 | Phase 6 | Pending |
+| SENS-01 | Phase 6 | Pending |
+| SENS-02 | Phase 6 | Pending |
+| SENS-03 | Phase 6 | Pending |
+| SENS-04 | Phase 6 | Pending |
+| CTRL-01 | Phase 7 | Pending |
+| CTRL-02 | Phase 7 | Pending |
+| CTRL-03 | Phase 7 | Pending |
+| CTRL-04 | Phase 7 | Pending |
+| HACS-02 | Phase 7 | Pending |
 
 **Coverage:**
 - v1.1 requirements: 19 total
-- Mapped to phases: 0 (pending roadmap creation)
-- Unmapped: 19
+- Mapped to phases: 19 (100%)
+- Unmapped: 0
 
 ---
 *Requirements defined: 2026-04-08*
-*Last updated: 2026-04-08 after milestone v1.1 definition*
+*Last updated: 2026-04-08 after roadmap creation for v1.1*
