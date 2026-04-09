@@ -18,9 +18,23 @@ views:
           - entity: sensor.luxtronik_2_0_luxtronik_operating_mode
             name: "Betriebsmodus"
             icon: "mdi:state-machine"
-          - entity: sensor.luxtronik_2_0_luxtronik_id_web_evuin
-            name: "EVU-Sperre aktiv"
-            icon: "mdi:lock-alert"
+          # EVUin: False = Kontakt offen = GESPERRT, True = Kontakt geschlossen = FREI
+          - type: conditional
+            conditions:
+              - entity: sensor.luxtronik_2_0_luxtronik_id_web_evuin
+                state: "False"
+            row:
+              entity: sensor.luxtronik_2_0_luxtronik_id_web_evuin
+              name: "EVU-Sperre: GESPERRT (Kontakt offen)"
+              icon: "mdi:lock-alert"
+          - type: conditional
+            conditions:
+              - entity: sensor.luxtronik_2_0_luxtronik_id_web_evuin
+                state: "True"
+            row:
+              entity: sensor.luxtronik_2_0_luxtronik_id_web_evuin
+              name: "EVU-Freigabe: FREI (Kontakt geschlossen)"
+              icon: "mdi:lock-open-variant"
           - entity: sensor.luxtronik_2_0_luxtronik_id_web_hauptmenustatus_zeile1
             name: "WP-Status"
             icon: "mdi:information-outline"
