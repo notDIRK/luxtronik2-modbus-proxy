@@ -67,8 +67,8 @@ Plans:
   4. User can navigate to the entity registry and enable additional sensors from the full parameter database without code changes
 **Plans:** 2 plans
 Plans:
-- [ ] 06-01-PLAN.md — sensor.py with core + bulk entity descriptions, entity class, platform registration
-- [ ] 06-02-PLAN.md — Unit tests for sensor descriptions and value conversion
+- [x] 06-01-PLAN.md — sensor.py with core + bulk entity descriptions, entity class, platform registration
+- [x] 06-02-PLAN.md — Unit tests for sensor descriptions and value conversion
 **UI hint**: yes
 
 ### Phase 7: Control Entities & Translations
