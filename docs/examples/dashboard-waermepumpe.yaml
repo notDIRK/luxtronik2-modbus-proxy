@@ -157,7 +157,7 @@ views:
           |-------|-----------|
           | **Heating** | Heizung aktiv — Fußbodenheizung wird versorgt |
           | **Hot Water** | Warmwasserbereitung aktiv |
-          | **Evu** | ⚠️ **EVU-Sperre** — Energieversorger blockiert Wärmepumpe |
+          | **Evu** | ⚠️ **EVU-Sperrzeit** — Energieversorger sperrt den Kompressor über den Rundsteuerempfänger (Kontakt geöffnet). WP darf nicht laufen bis der Netzbetreiber den Kontakt wieder schließt. |
           | **Defrost** | Abtauung läuft |
           | **No Request** | Kein Bedarf — WP steht still |
           | **Cooling** | Kühlung aktiv (falls konfiguriert) |
