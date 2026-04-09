@@ -4,8 +4,8 @@ milestone: v1.0
 milestone_name: milestone
 status: executing
 stopped_at: Phase 7 context gathered (assumptions mode)
-last_updated: "2026-04-09T13:45:16.762Z"
-last_activity: 2026-04-09 -- Phase 7 planning complete
+last_updated: "2026-04-09T13:45:56.764Z"
+last_activity: 2026-04-09 -- Phase 07 execution started
 progress:
   total_phases: 4
   completed_phases: 3
@@ -21,14 +21,14 @@ progress:
 See: .planning/PROJECT.md (updated 2026-04-08)
 
 **Core value:** Owners of Luxtronik 2.0 heat pumps can integrate them into evcc and modern energy management systems via standard Modbus TCP, without needing to understand the proprietary protocol or Modbus register numbers.
-**Current focus:** Phase 06 — sensor-entities
+**Current focus:** Phase 07 — Control Entities & Translations
 
 ## Current Position
 
-Phase: 7
-Plan: Not started
-Status: Ready to execute
-Last activity: 2026-04-09 -- Phase 7 planning complete
+Phase: 07 (Control Entities & Translations) — EXECUTING
+Plan: 1 of 3
+Status: Executing Phase 07
+Last activity: 2026-04-09 -- Phase 07 execution started
 
 Progress: [░░░░░░░░░░░░░░░░░░░░] 0%
 
