@@ -18,18 +18,21 @@ views:
           - entity: sensor.luxtronik_2_0_luxtronik_operating_mode
             name: "Betriebsmodus"
             icon: "mdi:state-machine"
-          - entity: sensor.luxtronik_2_0_luxtronik_status
-            name: "Status"
+          - entity: sensor.luxtronik_2_0_luxtronik_id_web_evuin
+            name: "EVU-Sperre aktiv"
+            icon: "mdi:lock-alert"
+          - entity: sensor.luxtronik_2_0_luxtronik_id_web_hauptmenustatus_zeile1
+            name: "WP-Status"
             icon: "mdi:information-outline"
-          - entity: sensor.luxtronik_2_0_luxtronik_status_duration
-            name: "Im Status seit"
+          - entity: sensor.luxtronik_2_0_luxtronik_id_web_hauptmenustatus_zeile3
+            name: "Status-Grund"
+            icon: "mdi:help-circle-outline"
+          - entity: sensor.luxtronik_2_0_luxtronik_id_web_hauptmenustatus_zeit
+            name: "Im Status seit (Sek.)"
             icon: "mdi:timer-sand"
           - entity: sensor.luxtronik_2_0_luxtronik_compressor
             name: "Kompressor"
             icon: "mdi:engine"
-          - entity: sensor.luxtronik_2_0_luxtronik_circulation_pump
-            name: "Umwälzpumpe"
-            icon: "mdi:pump"
           - entity: select.luxtronik_2_0_sg_ready
             name: "SG-Ready Modus"
             icon: "mdi:solar-power"
