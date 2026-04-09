@@ -65,7 +65,10 @@ Plans:
   2. Operating mode and compressor/pump running state appear as sensor entities with meaningful state strings
   3. Power consumption sensor appears when the calculation is available from the controller
   4. User can navigate to the entity registry and enable additional sensors from the full parameter database without code changes
-**Plans**: TBD
+**Plans:** 2 plans
+Plans:
+- [ ] 06-01-PLAN.md — sensor.py with core + bulk entity descriptions, entity class, platform registration
+- [ ] 06-02-PLAN.md — Unit tests for sensor descriptions and value conversion
 **UI hint**: yes
 
 ### Phase 7: Control Entities & Translations
@@ -90,5 +93,5 @@ Plans:
 | 3. Documentation and Release | v1.0 | 4/4 | Complete | 2026-04-06 |
 | 4. PyPI Publish & HACS Scaffold | v1.1 | 0/2 | Not started | - |
 | 5. Coordinator & Config Flow | v1.1 | 0/2 | Not started | - |
-| 6. Sensor Entities | v1.1 | 0/? | Not started | - |
+| 6. Sensor Entities | v1.1 | 0/2 | Not started | - |
 | 7. Control Entities & Translations | v1.1 | 0/? | Not started | - |
