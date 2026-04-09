@@ -36,8 +36,8 @@
   4. `hacs.json`, `manifest.json`, `const.py`, and brand icon exist and are schema-valid
 **Plans:** 2 plans
 Plans:
-- [ ] 04-01-PLAN.md — Version bump to 1.1.0, PyPI metadata, and trusted publishing workflow
-- [ ] 04-02-PLAN.md — HACS integration skeleton (hacs.json, manifest, const, icon) and CI validation workflow
+- [x] 04-01-PLAN.md — Version bump to 1.1.0, PyPI metadata, and trusted publishing workflow
+- [x] 04-02-PLAN.md — HACS integration skeleton (hacs.json, manifest, const, icon) and CI validation workflow
 **UI hint**: yes
 
 ### Phase 5: Coordinator & Config Flow
