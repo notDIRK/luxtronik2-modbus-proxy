@@ -50,7 +50,10 @@ Plans:
   3. Adding a duplicate IP (already configured for BenPru/luxtronik) shows a conflict warning in the config flow
   4. HA logs show coordinator poll cycles completing in executor threads (no event loop blocking)
   5. Two simultaneous write+read calls do not produce a connection error (asyncio.Lock serializes them)
-**Plans**: TBD
+**Plans:** 2 plans
+Plans:
+- [ ] 05-01-PLAN.md — LuxtronikCoordinator with connect-per-call, executor dispatch, asyncio.Lock
+- [ ] 05-02-PLAN.md — Config flow (IP entry, connection test, BenPru conflict), __init__.py wiring, manifest update
 **UI hint**: yes
 
 ### Phase 6: Sensor Entities
@@ -86,6 +89,6 @@ Plans:
 | 2. Integration-Ready Register Map | v1.0 | 3/3 | Complete | 2026-04-06 |
 | 3. Documentation and Release | v1.0 | 4/4 | Complete | 2026-04-06 |
 | 4. PyPI Publish & HACS Scaffold | v1.1 | 0/2 | Not started | - |
-| 5. Coordinator & Config Flow | v1.1 | 0/? | Not started | - |
+| 5. Coordinator & Config Flow | v1.1 | 0/2 | Not started | - |
 | 6. Sensor Entities | v1.1 | 0/? | Not started | - |
 | 7. Control Entities & Translations | v1.1 | 0/? | Not started | - |
