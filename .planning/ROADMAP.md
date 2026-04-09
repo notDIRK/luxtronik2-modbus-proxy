@@ -83,9 +83,9 @@ Plans:
   5. Config flow form labels, error messages, and entity names display in German when HA is set to German locale
 **Plans:** 3 plans
 Plans:
-- [ ] 07-01-PLAN.md — Coordinator write methods with rate limiting, PLATFORMS update
-- [ ] 07-02-PLAN.md — select.py (HeatingMode, HotWaterMode, SG-Ready) and number.py (temperature setpoints)
-- [ ] 07-03-PLAN.md — EN+DE translations, unit tests for select and number entities
+- [x] 07-01-PLAN.md — Coordinator write methods with rate limiting, PLATFORMS update
+- [x] 07-02-PLAN.md — select.py (HeatingMode, HotWaterMode, SG-Ready) and number.py (temperature setpoints)
+- [x] 07-03-PLAN.md — EN+DE translations, unit tests for select and number entities
 **UI hint**: yes
 
 ## Progress
