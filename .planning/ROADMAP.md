@@ -81,7 +81,11 @@ Plans:
   3. Temperature setpoint number entities accept values within validated ranges and reject out-of-range inputs
   4. Rapid repeated writes are rate-limited: the second write to the same register within the protection window is silently deferred, not sent to the controller
   5. Config flow form labels, error messages, and entity names display in German when HA is set to German locale
-**Plans**: TBD
+**Plans:** 3 plans
+Plans:
+- [ ] 07-01-PLAN.md — Coordinator write methods with rate limiting, PLATFORMS update
+- [ ] 07-02-PLAN.md — select.py (HeatingMode, HotWaterMode, SG-Ready) and number.py (temperature setpoints)
+- [ ] 07-03-PLAN.md — EN+DE translations, unit tests for select and number entities
 **UI hint**: yes
 
 ## Progress
@@ -94,4 +98,4 @@ Plans:
 | 4. PyPI Publish & HACS Scaffold | v1.1 | 0/2 | Not started | - |
 | 5. Coordinator & Config Flow | v1.1 | 0/2 | Not started | - |
 | 6. Sensor Entities | v1.1 | 0/2 | Not started | - |
-| 7. Control Entities & Translations | v1.1 | 0/? | Not started | - |
+| 7. Control Entities & Translations | v1.1 | 0/3 | Not started | - |
