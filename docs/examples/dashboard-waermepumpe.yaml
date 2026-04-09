@@ -41,8 +41,10 @@ views:
           - entity: sensor.luxtronik_2_0_luxtronik_id_web_hauptmenustatus_zeile3
             name: "Status-Grund"
             icon: "mdi:help-circle-outline"
-          - entity: sensor.luxtronik_2_0_luxtronik_id_web_hauptmenustatus_zeit
-            name: "Im Status seit (Sek.)"
+          - type: template
+            entity: sensor.luxtronik_2_0_luxtronik_id_web_hauptmenustatus_zeit
+            name: "Im Status seit"
+            state: "{{ ((states('sensor.luxtronik_2_0_luxtronik_id_web_hauptmenustatus_zeit') | int(0)) // 3600) }}h {{ (((states('sensor.luxtronik_2_0_luxtronik_id_web_hauptmenustatus_zeit') | int(0)) % 3600) // 60) }}min"
             icon: "mdi:timer-sand"
           - entity: sensor.luxtronik_2_0_luxtronik_compressor
             name: "Kompressor"
