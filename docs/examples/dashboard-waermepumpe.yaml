@@ -41,11 +41,13 @@ views:
           - entity: sensor.luxtronik_2_0_luxtronik_id_web_hauptmenustatus_zeile3
             name: "Status-Grund"
             icon: "mdi:help-circle-outline"
+          # EVU-Sperrzeit: laufende Dauer seit EVU den Kompressor gesperrt hat.
+          # Die Luxtronik zeigt diesen Wert auf dem Display als "Sperrzeit" an.
           - type: template
             entity: sensor.luxtronik_2_0_luxtronik_id_web_hauptmenustatus_zeit
-            name: "Im Status seit"
+            name: "EVU-Sperrzeit"
             state: "{{ ((states('sensor.luxtronik_2_0_luxtronik_id_web_hauptmenustatus_zeit') | int(0)) // 3600) }}h {{ (((states('sensor.luxtronik_2_0_luxtronik_id_web_hauptmenustatus_zeit') | int(0)) % 3600) // 60) }}min"
-            icon: "mdi:timer-sand"
+            icon: "mdi:timer-lock"
           - entity: sensor.luxtronik_2_0_luxtronik_compressor
             name: "Kompressor"
             icon: "mdi:engine"
