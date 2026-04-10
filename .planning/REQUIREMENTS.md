@@ -65,33 +65,31 @@ Explicitly excluded. Documented to prevent scope creep.
 
 ## Traceability
 
-Populated during roadmap creation.
-
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| SPLIT-01 | TBD | Pending |
-| SPLIT-02 | TBD | Pending |
-| SPLIT-03 | TBD | Pending |
-| SPLIT-04 | TBD | Pending |
-| SPLIT-05 | TBD | Pending |
-| RENAME-01 | TBD | Pending |
-| RENAME-02 | TBD | Pending |
-| RENAME-03 | TBD | Pending |
-| RENAME-04 | TBD | Pending |
-| RENAME-05 | TBD | Pending |
-| DOCS-01 | TBD | Pending |
-| DOCS-02 | TBD | Pending |
-| DOCS-03 | TBD | Pending |
-| DOCS-04 | TBD | Pending |
-| DOCS-05 | TBD | Pending |
-| MIGRATE-01 | TBD | Pending |
-| MIGRATE-02 | TBD | Pending |
-| MIGRATE-03 | TBD | Pending |
+| SPLIT-01 | Phase 11 | Pending |
+| SPLIT-02 | Phase 8 | Pending |
+| SPLIT-03 | Phase 8 | Pending |
+| SPLIT-04 | Phase 11 | Pending |
+| SPLIT-05 | Phase 11 | Pending |
+| RENAME-01 | Phase 9 | Pending |
+| RENAME-02 | Phase 9 | Pending |
+| RENAME-03 | Phase 9 | Pending |
+| RENAME-04 | Phase 9 | Pending |
+| RENAME-05 | Phase 9 | Pending |
+| DOCS-01 | Phase 10 | Pending |
+| DOCS-02 | Phase 10 | Pending |
+| DOCS-03 | Phase 10 | Pending |
+| DOCS-04 | Phase 10 | Pending |
+| DOCS-05 | Phase 11 | Pending |
+| MIGRATE-01 | Phase 12 | Pending |
+| MIGRATE-02 | Phase 12 | Pending |
+| MIGRATE-03 | Phase 12 | Pending |
 
 **Coverage:**
 - v1.2 requirements: 18 total
-- Mapped to phases: 0 (to be filled by roadmapper)
-- Unmapped: 18
+- Mapped to phases: 18
+- Unmapped: 0
 
 ## Archive — v1.1 Requirements (Shipped)
 

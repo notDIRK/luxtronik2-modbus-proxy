@@ -1,9 +1,10 @@
-# Roadmap: luxtronik2-modbus-proxy
+# Roadmap: luxtronik2-hass (formerly luxtronik2-modbus-proxy)
 
 ## Milestones
 
 - ✅ **v1.0 MVP** — Phases 1-3 (shipped 2026-04-08) — [Archive](milestones/v1.0-ROADMAP.md)
-- **v1.1 HACS Integration** — Phases 4-7 (active)
+- ✅ **v1.1 HACS Integration** — Phases 4-7 (code-complete 2026-04-09)
+- **v1.2 Repo Split & HA-First Rebrand** — Phases 8-12 (active)
 
 ## Phases
 
@@ -16,76 +17,81 @@
 
 </details>
 
-**v1.1 HACS Integration**
+<details>
+<summary>✅ v1.1 HACS Integration (Phases 4-7) — CODE-COMPLETE 2026-04-09</summary>
 
-- [ ] **Phase 4: PyPI Publish & HACS Scaffold** — Proxy package on PyPI, repo skeleton with hacs.json + manifest.json + brand icon + CI validation action
-- [ ] **Phase 5: Coordinator & Config Flow** — DataUpdateCoordinator with connect-per-call, asyncio.Lock, config flow UI (IP entry, connection test, BenPru conflict warning)
-- [ ] **Phase 6: Sensor Entities** — Read-only temperature, mode, power, and status sensors; entity registry exposes full 1,126-parameter database
-- [ ] **Phase 7: Control Entities & Translations** — HeatingMode/HotWaterMode/SG-Ready select entities, temperature setpoint numbers, write rate limiting, EN+DE translations
+- [x] Phase 4: PyPI Publish & HACS Scaffold — Proxy package on PyPI, repo skeleton with hacs.json + manifest.json + brand icon + CI validation action
+- [x] Phase 5: Coordinator & Config Flow — DataUpdateCoordinator with connect-per-call, asyncio.Lock, config flow UI
+- [x] Phase 6: Sensor Entities — Read-only temperature, mode, power, and status sensors; entity registry exposes full 1,126-parameter database
+- [x] Phase 7: Control Entities & Translations — HeatingMode/HotWaterMode/SG-Ready select entities, setpoint numbers, write rate limiting, EN+DE translations
+
+</details>
+
+**v1.2 Repo Split & HA-First Rebrand**
+
+- [ ] **Phase 8: New Repo Extraction & Setup** — Create local `luxtronik2-hass` working copy via `git filter-repo`, strip proxy-only files, verify history is intact. No push, no rename yet.
+- [ ] **Phase 9: Rename in New Repo** — Rename HACS domain, Python package, `custom_components/` folder, const, imports, and all internal references in the extracted working copy.
+- [ ] **Phase 10: Documentation Rewrite** — EN+DE README with three-path positioning (Supported / Experimental / Planned) plus `MIGRATION.md` in the new-repo working copy.
+- [ ] **Phase 11: Publish & Archive Legacy** — Push new repo to GitHub, add experimental banner + forward link to old repo README (EN+DE), archive the old repo. Irreversible checkpoint.
+- [ ] **Phase 12: Maintainer Migration Verification** — Live migration on the maintainer's HA instance: remove old integration, install new via HACS custom repository, verify all 31 entities + dashboard render correctly.
 
 ## Phase Details
 
-### Phase 4: PyPI Publish & HACS Scaffold
-**Goal**: The proxy package is on PyPI and the repo has a valid, HACS-discoverable integration skeleton
-**Depends on**: Nothing (first v1.1 phase; v1.0 proxy is the input)
-**Requirements**: HACS-04, HACS-01, HACS-03
+### Phase 8: New Repo Extraction & Setup
+**Goal**: A clean local working copy of the future `luxtronik2-hass` repo exists with preserved HACS integration history and no proxy artifacts — ready for rename work in Phase 9.
+**Depends on**: Phase 7 (v1.1 code-complete)
+**Requirements**: SPLIT-02, SPLIT-03
 **Success Criteria** (what must be TRUE):
-  1. `pip install luxtronik2-modbus-proxy==1.1.0` succeeds from PyPI
-  2. HACS can add the repository as a custom integration without validation errors
-  3. GitHub Actions validate.yml runs the HACS action on every push and reports pass/fail
-  4. `hacs.json`, `manifest.json`, `const.py`, and brand icon exist and are schema-valid
-**Plans:** 2 plans
-Plans:
-- [x] 04-01-PLAN.md — Version bump to 1.1.0, PyPI metadata, and trusted publishing workflow
-- [x] 04-02-PLAN.md — HACS integration skeleton (hacs.json, manifest, const, icon) and CI validation workflow
+  1. A local clone-derived working directory (e.g. `~/claude-code/luxtronik2-hass/`) exists, produced via `git filter-repo --path custom_components/ --path tests/ --path .github/` (or equivalent), with no remote origin set.
+  2. `git log -- custom_components/` in the new working copy shows all Phase 4-7 commits and the quick-task backup commits; `git blame` on `coordinator.py` and `config_flow.py` resolves to the original SHAs.
+  3. The working copy contains no `src/`, no `Dockerfile`, no `config.example.yaml`, no `mkdocs.yml`, no `docs/en/proxy*`, no systemd unit file — verified by `find` listing.
+  4. A trimmed `pyproject.toml` (dev deps only, no proxy entry points) and `README.md` placeholder exist so the tree is coherent; existing HA tests still pass under `pytest`.
+**Plans**: TBD
+
+### Phase 9: Rename in New Repo
+**Goal**: The extracted working copy is fully rebranded as `luxtronik2_hass` internally — domain, folder, package, imports, strings — with HA integration tests still passing.
+**Depends on**: Phase 8
+**Requirements**: RENAME-01, RENAME-02, RENAME-03, RENAME-04, RENAME-05
+**Success Criteria** (what must be TRUE):
+  1. `custom_components/luxtronik2_hass/` exists; `custom_components/luxtronik2_modbus_proxy/` does not; `manifest.json` `domain` is `luxtronik2_hass` and `name` reflects the HA-first identity.
+  2. `grep -r luxtronik2_modbus_proxy` in the working copy returns zero hits across Python sources, tests, translations, and pyproject.toml (historical commit messages in `git log` are allowed).
+  3. `const.py` `DOMAIN` equals `luxtronik2_hass`; all imports, logger names, HACS update URLs, documentation URLs and badge URLs point at `notDIRK/luxtronik2-hass`.
+  4. `pytest` passes on the renamed tree; the HA integration loads without domain/import errors when smoke-loaded.
+**Plans**: TBD
 **UI hint**: yes
 
-### Phase 5: Coordinator & Config Flow
-**Goal**: Users can add the integration in HA's UI by entering only an IP address, and HA polls the heat pump correctly without blocking the event loop
-**Depends on**: Phase 4
-**Requirements**: ARCH-01, ARCH-02, ARCH-03, SETUP-02, SETUP-03, SETUP-04
+### Phase 10: Documentation Rewrite
+**Goal**: The new working copy has honest, HA-first documentation (EN+DE) with three-path positioning and a migration guide for v1.1 users.
+**Depends on**: Phase 9
+**Requirements**: DOCS-01, DOCS-02, DOCS-03, DOCS-04
 **Success Criteria** (what must be TRUE):
-  1. User navigates to Settings > Integrations, searches "Luxtronik", enters IP, and the integration is created in one step
-  2. Entering an unreachable IP shows an error message in the config flow UI instead of hanging
-  3. Adding a duplicate IP (already configured for BenPru/luxtronik) shows a conflict warning in the config flow
-  4. HA logs show coordinator poll cycles completing in executor threads (no event loop blocking)
-  5. Two simultaneous write+read calls do not produce a connection error (asyncio.Lock serializes them)
-**Plans:** 2 plans
-Plans:
-- [x] 05-01-PLAN.md — LuxtronikCoordinator with connect-per-call, executor dispatch, asyncio.Lock
-- [x] 05-02-PLAN.md — Config flow (IP entry, connection test, BenPru conflict), __init__.py wiring, manifest update
+  1. `README.md` (EN) opens with three-path structure and honest status labels: Path 1 HACS HA integration ✅ Supported, Path 2 Legacy Modbus Proxy ⚠️ Experimental (linked to archived repo), Path 3 HA Add-on 📋 Planned v1.3.
+  2. `README.de.md` is a content-equivalent German mirror of `README.md` — same sections, same links, same labels.
+  3. Both READMEs state within the first three sentences that Home Assistant is the primary supported use case and the Modbus proxy is an unmaintained legacy byproduct.
+  4. `MIGRATION.md` documents the v1.1 → v1.2 upgrade path: remove old integration, add new via HACS custom repository, re-enter IP, verify dashboard renders — with a "one dashboard file, 31 entities, zero automations" blast-radius note matching the maintainer's live snapshot.
+**Plans**: TBD
 **UI hint**: yes
 
-### Phase 6: Sensor Entities
-**Goal**: After entering the IP, users immediately see heat pump values as HA sensor entities — no further configuration required
-**Depends on**: Phase 5
-**Requirements**: SETUP-01, SENS-01, SENS-02, SENS-03, SENS-04
+### Phase 11: Publish & Archive Legacy
+**Goal**: `notDIRK/luxtronik2-hass` is public on GitHub and the old repo is archived behind an experimental banner with forward links — the rebrand is live and irreversible.
+**Depends on**: Phase 10
+**Requirements**: SPLIT-01, SPLIT-04, SPLIT-05, DOCS-05
 **Success Criteria** (what must be TRUE):
-  1. Installing via HACS and entering the IP produces sensor entities for outside temp, flow temp, return temp, hot water temp, and source in/out temps with correct units
-  2. Operating mode and compressor/pump running state appear as sensor entities with meaningful state strings
-  3. Power consumption sensor appears when the calculation is available from the controller
-  4. User can navigate to the entity registry and enable additional sensors from the full parameter database without code changes
-**Plans:** 2 plans
-Plans:
-- [x] 06-01-PLAN.md — sensor.py with core + bulk entity descriptions, entity class, platform registration
-- [x] 06-02-PLAN.md — Unit tests for sensor descriptions and value conversion
-**UI hint**: yes
+  1. `gh repo view notDIRK/luxtronik2-hass` shows a public, MIT-licensed repository containing `custom_components/luxtronik2_hass/`; clicking through to `coordinator.py` shows the preserved Phase 4-7 commit history via `git blame`.
+  2. The old repo `notDIRK/luxtronik2-modbus-proxy` displays the GitHub "Archived" label, is read-only, and both `README.md` and `README.de.md` begin with a "⚠️ Experimental — not actively maintained" banner and a "→ Use luxtronik2-hass instead" forward link to the new repo.
+  3. Pre-commit secret scan passes on both repos before their respective final pushes; no IP/hostname/credential leak in the new repo or in the banner commit on the old one.
+  4. The HACS custom repository URL for the new repo validates successfully in a trial HACS "Add custom repository" dialog (no manifest/hacs.json errors).
+**Plans**: TBD
 
-### Phase 7: Control Entities & Translations
-**Goal**: Users can control heating mode, hot water mode, SG-ready state, and temperature setpoints from HA, with write protection guarding the controller NAND flash — and all UI text is available in EN and DE
-**Depends on**: Phase 6
-**Requirements**: CTRL-01, CTRL-02, CTRL-03, CTRL-04, HACS-02
+### Phase 12: Maintainer Migration Verification
+**Goal**: The maintainer's live HA instance runs the new `luxtronik2_hass` integration end-to-end with all entities and the dashboard intact — proving the rebrand works in practice.
+**Depends on**: Phase 11
+**Requirements**: MIGRATE-01, MIGRATE-02, MIGRATE-03
 **Success Criteria** (what must be TRUE):
-  1. HeatingMode and HotWaterMode select entities offer all valid options and update the heat pump when the user picks one
-  2. SG-Ready select entity accepts modes 0-3 and writes the correct parameter combination to the controller
-  3. Temperature setpoint number entities accept values within validated ranges and reject out-of-range inputs
-  4. Rapid repeated writes are rate-limited: the second write to the same register within the protection window is silently deferred, not sent to the controller
-  5. Config flow form labels, error messages, and entity names display in German when HA is set to German locale
-**Plans:** 3 plans
-Plans:
-- [x] 07-01-PLAN.md — Coordinator write methods with rate limiting, PLATFORMS update
-- [x] 07-02-PLAN.md — select.py (HeatingMode, HotWaterMode, SG-Ready) and number.py (temperature setpoints)
-- [x] 07-03-PLAN.md — EN+DE translations, unit tests for select and number entities
+  1. On the maintainer's HA 2026.4.1 instance, the old `luxtronik2_modbus_proxy` config entry is deleted and the HA entity registry shows zero entities referencing the old domain (no ghosts).
+  2. The new `luxtronik2_hass` integration is installed via HACS "Add custom repository" pointing at `notDIRK/luxtronik2-hass`, and the config flow completes successfully after entering the heat pump IP.
+  3. After the new integration loads, the HA entity registry shows all 31 previously expected entities under the stable `luxtronik_2_0_*` device slug, and `docs/examples/dashboard-waermepumpe.yaml` renders all 32 referenced values without "entity not found" errors.
+**Plans**: TBD
 **UI hint**: yes
 
 ## Progress
@@ -95,7 +101,12 @@ Plans:
 | 1. Core Proxy | v1.0 | 4/4 | Complete | 2026-04-05 |
 | 2. Integration-Ready Register Map | v1.0 | 3/3 | Complete | 2026-04-06 |
 | 3. Documentation and Release | v1.0 | 4/4 | Complete | 2026-04-06 |
-| 4. PyPI Publish & HACS Scaffold | v1.1 | 0/2 | Not started | - |
-| 5. Coordinator & Config Flow | v1.1 | 0/2 | Not started | - |
-| 6. Sensor Entities | v1.1 | 0/2 | Not started | - |
-| 7. Control Entities & Translations | v1.1 | 0/3 | Not started | - |
+| 4. PyPI Publish & HACS Scaffold | v1.1 | 2/2 | Complete | 2026-04-09 |
+| 5. Coordinator & Config Flow | v1.1 | 2/2 | Complete | 2026-04-09 |
+| 6. Sensor Entities | v1.1 | 2/2 | Complete | 2026-04-09 |
+| 7. Control Entities & Translations | v1.1 | 3/3 | Complete | 2026-04-09 |
+| 8. New Repo Extraction & Setup | v1.2 | 0/? | Ready to plan | - |
+| 9. Rename in New Repo | v1.2 | 0/? | Not started | - |
+| 10. Documentation Rewrite | v1.2 | 0/? | Not started | - |
+| 11. Publish & Archive Legacy | v1.2 | 0/? | Not started | - |
+| 12. Maintainer Migration Verification | v1.2 | 0/? | Not started | - |

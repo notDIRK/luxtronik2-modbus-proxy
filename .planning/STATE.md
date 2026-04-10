@@ -2,12 +2,12 @@
 gsd_state_version: 1.0
 milestone: v1.2
 milestone_name: repo-split-rebrand
-status: defining_requirements
+status: ready_to_plan
 stopped_at: null
 last_updated: "2026-04-10"
 last_activity: 2026-04-10
 progress:
-  total_phases: 0
+  total_phases: 5
   completed_phases: 0
   total_plans: 0
   completed_plans: 0
@@ -21,16 +21,18 @@ progress:
 See: .planning/PROJECT.md (updated 2026-04-10)
 
 **Core value:** Owners of Luxtronik 2.0 heat pumps can integrate them into modern energy management systems — with Home Assistant as the primary, supported integration path.
-**Current focus:** Milestone v1.2 — Repo Split & HA-First Rebrand (defining requirements)
+**Current focus:** Milestone v1.2 — Repo Split & HA-First Rebrand (Phase 8 ready to plan)
 
 ## Current Position
 
-Phase: Not started (defining requirements)
+Phase: 8 — New Repo Extraction & Setup
 Plan: —
-Status: Defining requirements
-Last activity: 2026-04-10 — Milestone v1.2 started
+Status: Ready to plan
+Last activity: 2026-04-10 — Roadmap created for v1.2 (Phases 8-12)
 
-Progress: [░░░░░░░░░░░░░░░░░░░░] 0%
+Progress: [░░░░░░░░░░░░░░░░░░░░] 0% (0/5 v1.2 phases complete)
+
+Next action: `/gsd-plan-phase 8`
 
 ## Accumulated Context
 
@@ -44,8 +46,10 @@ Decisions are logged in PROJECT.md Key Decisions table.
 - **Git history preserved**: Use `git filter-repo --path custom_components/` to extract HACS-integration history into the new repo. `git blame` must continue to resolve against Phase 4-7 commits.
 - **Archive, don't delete**: Legacy repo stays reachable via GitHub redirect + banner. PRs technically possible but not prioritized.
 - **Full rename**: Internal `domain` in `manifest.json` gets renamed too (not just the repo). Entity-IDs in HA use device-name slugs (`luxtronik_2_0_*`), not the domain — so user-visible IDs stay stable across the rename.
-- **PyPI republish under new name**: Old name gets yanked, new name gets published. Package v1.1.0 on PyPI stays historically but is marked as unmaintained.
+- **No PyPI work in v1.2**: Scoped out. HA integration doesn't depend on the proxy's PyPI package; v1.1.0 was never published (trusted publishing pending). Nothing to republish or yank.
+- **No Docker work in v1.2**: Docker image belongs to the proxy, which is being archived. No new Docker releases.
 - **HA Add-on is v1.3, not v1.2**: v1.2 is rebrand-only; v1.3 is the first feature release under the new name.
+- **Irreversibility chain**: Phases 8-10 operate on a local working copy only. Phase 11 is the first irreversible phase (push new repo + archive old). Phase 12 touches the live HA instance — must run last.
 
 ### Key Architecture Decisions carried over from v1.1
 
@@ -71,15 +75,15 @@ None.
 ### Blockers/Concerns
 
 - SG-ready mode parameter ID combinations still carry `[ASSUMED]` flag — carry-over from v1.0, orthogonal to v1.2 scope
-- 6 HUMAN-UAT items from `06-VERIFICATION.md` remain unverified — carry-over, must be resolved before calling v1.1 code "validated"
-- PyPI trusted-publishing setup pending — blocked v1.1.0 release on PyPI, affects the rename plan in v1.2
+- 6 HUMAN-UAT items from `06-VERIFICATION.md` remain unverified — carry-over, orthogonal to v1.2 (rebrand doesn't change behavior); should be resolved alongside Phase 12 migration verification on the live instance
+- PyPI trusted-publishing setup still pending — explicitly out of scope for v1.2 (see Decisions)
 
 ### Previous milestone (v1.1) archive
 
-See `.planning/MILESTONES.md` for v1.1 summary. Phase directories for Phases 4-7 will be cleared when new phases are written for v1.2.
+See `.planning/MILESTONES.md` for v1.1 summary. Phase directories for Phases 4-7 have been cleared; new phase directories will be created by `/gsd-plan-phase` for Phases 8-12.
 
 ## Session Continuity
 
 Last session: 2026-04-10
-Stopped at: Milestone v1.2 started — gathering requirements
+Stopped at: Roadmap created for v1.2 — Phase 8 ready to plan
 Resume file: —
