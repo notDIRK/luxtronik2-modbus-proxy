@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Phase 12 context gathered
-last_updated: "2026-04-10T15:51:33.266Z"
-last_activity: 2026-04-10 -- Phase 12 planning complete
+stopped_at: Phase 12 Plan 01 complete — awaiting maintainer migration (Plan 02 checkpoint)
+last_updated: "2026-04-10T16:00:00.000Z"
+last_activity: 2026-04-10 -- Phase 12 Plan 01 complete (pre-flight GREEN)
 progress:
   total_phases: 5
   completed_phases: 3
-  total_plans: 6
-  completed_plans: 3
-  percent: 50
+  total_plans: 7
+  completed_plans: 4
+  percent: 57
 ---
 
 # Project State
@@ -21,18 +21,18 @@ progress:
 See: .planning/PROJECT.md (updated 2026-04-10)
 
 **Core value:** Owners of Luxtronik 2.0 heat pumps can integrate them into modern energy management systems — with Home Assistant as the primary, supported integration path.
-**Current focus:** Milestone v1.2 — Repo Split & HA-First Rebrand (Phases 8-10 complete, **awaiting user gate for Phase 11 irreversible actions**)
+**Current focus:** Milestone v1.2 — Phase 12 in progress (Plan 01 complete, Plan 02 gated on maintainer live-migration checkpoint)
 
 ## Current Position
 
-Phase: 11 — Publish & Archive Legacy (BLOCKED on user confirmation)
-Plan: —
-Status: Ready to execute
-Last activity: 2026-04-10 -- Phase 12 planning complete
+Phase: 12 — Maintainer Migration Verification
+Plan: 12-02 (BLOCKED on maintainer human-action checkpoint)
+Status: Pre-flight GREEN; awaiting maintainer to run 7-step checklist on live HA 2026.4.1
+Last activity: 2026-04-10 -- Phase 12 Plan 01 complete (dashboard mirrored, checklist + verification skeleton created)
 
-Progress: [████████████░░░░░░░░] 60% (3/5 v1.2 phases complete)
+Progress: [██████████████░░░░░░] 71% (3/5 v1.2 phases complete + Phase 12 Wave 1 done)
 
-Next action: User confirms → `/gsd-plan-phase 11`
+Next action: Maintainer runs `12-HUMAN-UAT.md` → pastes sanitized results block → resume `/gsd-execute-phase 12`
 
 ## Accumulated Context
 
