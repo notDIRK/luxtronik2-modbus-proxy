@@ -1,3 +1,11 @@
+> ## ⚠️ Experimental — Not Actively Maintained
+>
+> This repository is the **legacy Modbus TCP proxy** byproduct of the Luxtronik 2.0 integration project. It is **no longer actively maintained** and is archived on GitHub (read-only).
+>
+> **→ Use [luxtronik2-hass](https://github.com/notDIRK/luxtronik2-hass) instead** — the actively maintained Home Assistant HACS integration is the supported path for Luxtronik 2.0 heat pumps.
+>
+> The proxy remains available for niche use cases (raw Modbus access from non-HA tools like evcc standalone), but receives no updates, bug fixes, or support.
+
 <!--
 Keywords: home assistant, hacs, luxtronik, luxtronik 2, alpha innotec, novelan, buderus,
 nibe, roth, elco, wolf, heat pump, waermepumpe, wärmepumpe, modbus, modbus tcp, evcc,
