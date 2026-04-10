@@ -1,17 +1,17 @@
 ---
 gsd_state_version: 1.0
-milestone: v1.2
-milestone_name: repo-split-rebrand
-status: awaiting_user_checkpoint
-stopped_at: "phase-11-irreversible-gate"
-last_updated: "2026-04-10"
-last_activity: 2026-04-10
+milestone: v1.0
+milestone_name: milestone
+status: Awaiting user checkpoint — Phase 11 pushes new repo to GitHub + archives the old repo. Irreversible.
+stopped_at: Phase 12 context gathered
+last_updated: "2026-04-10T13:33:13.247Z"
+last_activity: 2026-04-10 — Phase 10 complete (README.md EN, README.de.md DE, MIGRATION.md written in luxtronik2-hass working copy, all grep SCs green)
 progress:
   total_phases: 5
   completed_phases: 3
-  total_plans: 3
+  total_plans: 4
   completed_plans: 3
-  percent: 60
+  percent: 75
 ---
 
 # Project State
@@ -84,6 +84,6 @@ See `.planning/MILESTONES.md` for v1.1 summary. Phase directories for Phases 4-7
 
 ## Session Continuity
 
-Last session: 2026-04-10
-Stopped at: Roadmap created for v1.2 — Phase 8 ready to plan
-Resume file: —
+Last session: 2026-04-10T13:33:13.245Z
+Stopped at: Phase 12 context gathered
+Resume file: .planning/phases/12-maintainer-migration-verification/12-CONTEXT.md
