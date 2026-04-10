@@ -31,7 +31,7 @@
 
 - [x] **Phase 8: New Repo Extraction & Setup** — Create local `luxtronik2-hass` working copy via `git filter-repo`, strip proxy-only files, verify history is intact. No push, no rename yet. ✅ 2026-04-10
 - [x] **Phase 9: Rename in New Repo** — Rename HACS domain, Python package, `custom_components/` folder, const, imports, and all internal references in the extracted working copy. ✅ 2026-04-10
-- [ ] **Phase 10: Documentation Rewrite** — EN+DE README with three-path positioning (Supported / Experimental / Planned) plus `MIGRATION.md` in the new-repo working copy.
+- [x] **Phase 10: Documentation Rewrite** — EN+DE README with three-path positioning (Supported / Experimental / Planned) plus `MIGRATION.md` in the new-repo working copy. ✅ 2026-04-10
 - [ ] **Phase 11: Publish & Archive Legacy** — Push new repo to GitHub, add experimental banner + forward link to old repo README (EN+DE), archive the old repo. Irreversible checkpoint.
 - [ ] **Phase 12: Maintainer Migration Verification** — Live migration on the maintainer's HA instance: remove old integration, install new via HACS custom repository, verify all 31 entities + dashboard render correctly.
 
@@ -71,7 +71,8 @@
   2. `README.de.md` is a content-equivalent German mirror of `README.md` — same sections, same links, same labels.
   3. Both READMEs state within the first three sentences that Home Assistant is the primary supported use case and the Modbus proxy is an unmaintained legacy byproduct.
   4. `MIGRATION.md` documents the v1.1 → v1.2 upgrade path: remove old integration, add new via HACS custom repository, re-enter IP, verify dashboard renders — with a "one dashboard file, 31 entities, zero automations" blast-radius note matching the maintainer's live snapshot.
-**Plans**: TBD
+**Plans**: 1 plan
+- [ ] 10-01-PLAN.md — Rewrite README.md (EN), README.de.md (DE), and create MIGRATION.md in the new-repo working copy
 **UI hint**: yes
 
 ### Phase 11: Publish & Archive Legacy
@@ -109,6 +110,6 @@
 | 7. Control Entities & Translations | v1.1 | 3/3 | Complete | 2026-04-09 |
 | 8. New Repo Extraction & Setup | v1.2 | 1/1 | Complete | 2026-04-10 |
 | 9. Rename in New Repo | v1.2 | 1/1 | Complete | 2026-04-10 |
-| 10. Documentation Rewrite | v1.2 | 0/? | Not started | - |
+| 10. Documentation Rewrite | v1.2 | 1/1 | Complete | 2026-04-10 |
 | 11. Publish & Archive Legacy | v1.2 | 0/? | Not started | - |
 | 12. Maintainer Migration Verification | v1.2 | 0/? | Not started | - |

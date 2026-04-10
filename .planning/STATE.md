@@ -2,16 +2,16 @@
 gsd_state_version: 1.0
 milestone: v1.2
 milestone_name: repo-split-rebrand
-status: in_progress
-stopped_at: null
+status: awaiting_user_checkpoint
+stopped_at: "phase-11-irreversible-gate"
 last_updated: "2026-04-10"
 last_activity: 2026-04-10
 progress:
   total_phases: 5
-  completed_phases: 2
-  total_plans: 2
-  completed_plans: 2
-  percent: 40
+  completed_phases: 3
+  total_plans: 3
+  completed_plans: 3
+  percent: 60
 ---
 
 # Project State
@@ -21,18 +21,18 @@ progress:
 See: .planning/PROJECT.md (updated 2026-04-10)
 
 **Core value:** Owners of Luxtronik 2.0 heat pumps can integrate them into modern energy management systems — with Home Assistant as the primary, supported integration path.
-**Current focus:** Milestone v1.2 — Repo Split & HA-First Rebrand (Phases 8-9 complete, Phase 10 ready to plan)
+**Current focus:** Milestone v1.2 — Repo Split & HA-First Rebrand (Phases 8-10 complete, **awaiting user gate for Phase 11 irreversible actions**)
 
 ## Current Position
 
-Phase: 10 — Documentation Rewrite
+Phase: 11 — Publish & Archive Legacy (BLOCKED on user confirmation)
 Plan: —
-Status: Ready to plan
-Last activity: 2026-04-10 — Phase 9 complete (rename to luxtronik2_hass done, grep sweep clean, 36/36 tests pass)
+Status: Awaiting user checkpoint — Phase 11 pushes new repo to GitHub + archives the old repo. Irreversible.
+Last activity: 2026-04-10 — Phase 10 complete (README.md EN, README.de.md DE, MIGRATION.md written in luxtronik2-hass working copy, all grep SCs green)
 
-Progress: [████████░░░░░░░░░░░░] 40% (2/5 v1.2 phases complete)
+Progress: [████████████░░░░░░░░] 60% (3/5 v1.2 phases complete)
 
-Next action: `/gsd-plan-phase 10`
+Next action: User confirms → `/gsd-plan-phase 11`
 
 ## Accumulated Context
 
