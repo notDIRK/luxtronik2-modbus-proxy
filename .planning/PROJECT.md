@@ -8,16 +8,21 @@ A Modbus TCP proxy for Luxtronik 2.0 heat pump controllers. Translates the propr
 
 Owners of Luxtronik 2.0 heat pumps can integrate them into evcc and modern energy management systems via standard Modbus TCP, without needing to understand the proprietary protocol or Modbus register numbers.
 
-## Current Milestone: v1.1 HACS Integration
+## Current Milestone: v1.2 Repo Split & HA-First Rebrand
 
-**Goal:** Luxtronik 2.0 Wärmepumpe als native Home Assistant Integration über HACS installierbar — IP eingeben, fertig, Werte sehen.
+**Goal:** Das Projekt in zwei Repos aufteilen — ein fokussiertes, aktiv gepflegtes Primary-Repo `luxtronik2-hass` für die HA-Integration, und das Legacy-Repo `luxtronik2-modbus-proxy` als archiviertes Experimental-Artefakt. README ehrlich neu positionieren mit drei Pfaden (Supported / Experimental / Planned).
 
 **Target features:**
-- HACS Custom Integration (installierbar über HACS Store)
-- Config Flow: IP-Adresse eingeben, Integration eingerichtet
-- Sensor-Entitäten für Temperaturen, Betriebsmodus, Leistung etc.
-- Kein separater Proxy-Container nötig — direkte Kommunikation mit WP
-- Nutzt bestehenden v1.0 Proxy-Code (luxtronik client, register map, write validation) als Library
+- Neues Repo `luxtronik2-hass` via `git filter-repo --path custom_components/` abgespalten (History der HACS-relevanten Commits mitgenommen)
+- Rename der internen Identität: HACS-Domain (`manifest.json`), Python-Package (`pyproject.toml`), `custom_components/`-Ordner, Docker-Image-Tag
+- README-Rewrite (EN+DE) mit Drei-Pfade-Positionierung und ehrlichen Status-Labels
+- PyPI-Republish unter neuem Paketnamen + Yank des alten
+- Altes Repo archivieren mit Banner und Forward-Link
+- Migrations-Anleitung für den einen bestehenden User
+
+**Non-goals for v1.2:**
+- HA Add-on für den Proxy → verschoben auf v1.3
+- Weiterentwicklung des Modbus-Proxys (keine neuen Features, keine Tests mit echten Clients)
 
 ## Current State (after Phase 7)
 
@@ -46,23 +51,28 @@ Owners of Luxtronik 2.0 heat pumps can integrate them into evcc and modern energ
 - ✓ GitHub Pages project homepage (MkDocs Material) — v1.0
 - ✓ evcc YAML configuration snippet with documentation — v1.0
 - ✓ HA coexistence documentation — v1.0
+- ✓ Home Assistant integration via HACS (config flow, coordinator, sensors, selects, numbers, backup button, EN/DE translations) — v1.1
 
 ### Active
 
-- [ ] evcc upstream heater template PR (after community validation)
-- [ ] Home Assistant integration via HACS custom component
-- [ ] Health/status HTTP endpoint for monitoring
-- [ ] Prometheus metrics endpoint
-- [ ] Community announcements (evcc forum, HA forum, haustechnikdialog.de)
+- [ ] Split into two repos: primary `luxtronik2-hass` (supported) + legacy `luxtronik2-modbus-proxy` (archived) — v1.2
+- [ ] Rename HACS integration identity (domain, package, folder) — v1.2
+- [ ] README rewrite (EN+DE) with honest three-path positioning — v1.2
+- [ ] Archive legacy repo with experimental banner — v1.2
+- [ ] HA Add-on wrapping the proxy (Path 3) — v1.3 (planned)
+- [ ] Community announcements for the rebranded integration — v1.2 (after rebrand)
 
 ### Out of Scope
 
-- Weather-forecast-based optimization — v2+ feature, not needed for core proxy
-- Alerting on connection failures — depends on metrics endpoint (Active)
+- Weather-forecast-based optimization — v2+ feature, not relevant to HA-focused rebrand
 - Claude skill for natural language control — private repo only, not published here
 - Firmware upgrade/modification — hardware limitation, not possible
 - OAuth/authentication on proxy — local network only, unnecessary complexity
 - Persistent Luxtronik connection — breaks HA coexistence, violates single-connection constraint
+- Health/status HTTP endpoint on the proxy — proxy is legacy/unmaintained, no new features
+- Prometheus metrics endpoint on the proxy — same reason
+- evcc upstream heater template PR — proxy path is unmaintained, won't champion upstream work
+- Dual-maintenance of proxy features — legacy repo archived, PRs welcome but won't be prioritized
 
 ## Context
 
@@ -126,4 +136,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-04-09 after Phase 6 completion — Sensor Entities*
+*Last updated: 2026-04-10 at start of milestone v1.2 — Repo Split & HA-First Rebrand*
