@@ -84,7 +84,8 @@
   2. The old repo `notDIRK/luxtronik2-modbus-proxy` displays the GitHub "Archived" label, is read-only, and both `README.md` and `README.de.md` begin with a "⚠️ Experimental — not actively maintained" banner and a "→ Use luxtronik2-hass instead" forward link to the new repo.
   3. Pre-commit secret scan passes on both repos before their respective final pushes; no IP/hostname/credential leak in the new repo or in the banner commit on the old one.
   4. The HACS custom repository URL for the new repo validates successfully in a trial HACS "Add custom repository" dialog (no manifest/hacs.json errors).
-**Plans**: TBD
+**Plans**: 1 plan
+- [ ] 11-01-PLAN.md — Secret scan → create + push new repo → verify HACS metadata → HUMAN GATE → prepend banner (EN+DE) → commit + push → archive legacy → write VERIFICATION.md
 
 ### Phase 12: Maintainer Migration Verification
 **Goal**: The maintainer's live HA instance runs the new `luxtronik2_hass` integration end-to-end with all entities and the dashboard intact — proving the rebrand works in practice.
@@ -94,7 +95,9 @@
   1. On the maintainer's HA 2026.4.1 instance, the old `luxtronik2_modbus_proxy` config entry is deleted and the HA entity registry shows zero entities referencing the old domain (no ghosts).
   2. The new `luxtronik2_hass` integration is installed via HACS "Add custom repository" pointing at `notDIRK/luxtronik2-hass`, and the config flow completes successfully after entering the heat pump IP.
   3. After the new integration loads, the HA entity registry shows all 31 previously expected entities under the stable `luxtronik_2_0_*` device slug, and `docs/examples/dashboard-waermepumpe.yaml` renders all 32 referenced values without "entity not found" errors.
-**Plans**: TBD
+**Plans**: 2 plans
+- [ ] 12-01-PLAN.md — Pre-flight: mirror dashboard into new repo, create maintainer checklist (12-HUMAN-UAT.md), stub verification audit trail
+- [ ] 12-02-PLAN.md — Maintainer executes checklist on live HA, populate 12-VERIFICATION.md with results, append "Maintainer verified" note to MIGRATION.md in new repo
 **UI hint**: yes
 
 ## Progress
