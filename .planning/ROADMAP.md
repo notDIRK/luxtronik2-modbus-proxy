@@ -29,7 +29,7 @@
 
 **v1.2 Repo Split & HA-First Rebrand**
 
-- [ ] **Phase 8: New Repo Extraction & Setup** — Create local `luxtronik2-hass` working copy via `git filter-repo`, strip proxy-only files, verify history is intact. No push, no rename yet.
+- [x] **Phase 8: New Repo Extraction & Setup** — Create local `luxtronik2-hass` working copy via `git filter-repo`, strip proxy-only files, verify history is intact. No push, no rename yet. ✅ 2026-04-10
 - [ ] **Phase 9: Rename in New Repo** — Rename HACS domain, Python package, `custom_components/` folder, const, imports, and all internal references in the extracted working copy.
 - [ ] **Phase 10: Documentation Rewrite** — EN+DE README with three-path positioning (Supported / Experimental / Planned) plus `MIGRATION.md` in the new-repo working copy.
 - [ ] **Phase 11: Publish & Archive Legacy** — Push new repo to GitHub, add experimental banner + forward link to old repo README (EN+DE), archive the old repo. Irreversible checkpoint.
@@ -43,10 +43,11 @@
 **Requirements**: SPLIT-02, SPLIT-03
 **Success Criteria** (what must be TRUE):
   1. A local clone-derived working directory (e.g. `~/claude-code/luxtronik2-hass/`) exists, produced via `git filter-repo --path custom_components/ --path tests/ --path .github/` (or equivalent), with no remote origin set.
-  2. `git log -- custom_components/` in the new working copy shows all Phase 4-7 commits and the quick-task backup commits; `git blame` on `coordinator.py` and `config_flow.py` resolves to the original SHAs.
+  2. `git log -- custom_components/` in the new working copy shows all Phase 4-7 commits and the quick-task backup commits (matched by commit message, author, and date — SHAs are necessarily rewritten by `git filter-repo`); `git blame` on `coordinator.py` and `config_flow.py` resolves to the corresponding original commit messages and authors.
   3. The working copy contains no `src/`, no `Dockerfile`, no `config.example.yaml`, no `mkdocs.yml`, no `docs/en/proxy*`, no systemd unit file — verified by `find` listing.
   4. A trimmed `pyproject.toml` (dev deps only, no proxy entry points) and `README.md` placeholder exist so the tree is coherent; existing HA tests still pass under `pytest`.
-**Plans**: TBD
+**Plans**: 1 plan
+- [ ] 08-01-PLAN.md — Fresh clone + filter-repo extraction, history verification, pyproject/README trim, proxy-test pruning, pytest green
 
 ### Phase 9: Rename in New Repo
 **Goal**: The extracted working copy is fully rebranded as `luxtronik2_hass` internally — domain, folder, package, imports, strings — with HA integration tests still passing.
@@ -105,7 +106,7 @@
 | 5. Coordinator & Config Flow | v1.1 | 2/2 | Complete | 2026-04-09 |
 | 6. Sensor Entities | v1.1 | 2/2 | Complete | 2026-04-09 |
 | 7. Control Entities & Translations | v1.1 | 3/3 | Complete | 2026-04-09 |
-| 8. New Repo Extraction & Setup | v1.2 | 0/? | Ready to plan | - |
+| 8. New Repo Extraction & Setup | v1.2 | 1/1 | Complete | 2026-04-10 |
 | 9. Rename in New Repo | v1.2 | 0/? | Not started | - |
 | 10. Documentation Rewrite | v1.2 | 0/? | Not started | - |
 | 11. Publish & Archive Legacy | v1.2 | 0/? | Not started | - |
