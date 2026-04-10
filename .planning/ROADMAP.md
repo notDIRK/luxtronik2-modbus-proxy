@@ -30,7 +30,7 @@
 **v1.2 Repo Split & HA-First Rebrand**
 
 - [x] **Phase 8: New Repo Extraction & Setup** — Create local `luxtronik2-hass` working copy via `git filter-repo`, strip proxy-only files, verify history is intact. No push, no rename yet. ✅ 2026-04-10
-- [ ] **Phase 9: Rename in New Repo** — Rename HACS domain, Python package, `custom_components/` folder, const, imports, and all internal references in the extracted working copy.
+- [x] **Phase 9: Rename in New Repo** — Rename HACS domain, Python package, `custom_components/` folder, const, imports, and all internal references in the extracted working copy. ✅ 2026-04-10
 - [ ] **Phase 10: Documentation Rewrite** — EN+DE README with three-path positioning (Supported / Experimental / Planned) plus `MIGRATION.md` in the new-repo working copy.
 - [ ] **Phase 11: Publish & Archive Legacy** — Push new repo to GitHub, add experimental banner + forward link to old repo README (EN+DE), archive the old repo. Irreversible checkpoint.
 - [ ] **Phase 12: Maintainer Migration Verification** — Live migration on the maintainer's HA instance: remove old integration, install new via HACS custom repository, verify all 31 entities + dashboard render correctly.
@@ -58,7 +58,8 @@
   2. `grep -r luxtronik2_modbus_proxy` in the working copy returns zero hits across Python sources, tests, translations, and pyproject.toml (historical commit messages in `git log` are allowed).
   3. `const.py` `DOMAIN` equals `luxtronik2_hass`; all imports, logger names, HACS update URLs, documentation URLs and badge URLs point at `notDIRK/luxtronik2-hass`.
   4. `pytest` passes on the renamed tree; the HA integration loads without domain/import errors when smoke-loaded.
-**Plans**: TBD
+**Plans**: 1 plan
+- [ ] 09-01-PLAN.md — Rename folder, manifest, const, tests, pyproject, README; verify with grep sweep + pytest
 **UI hint**: yes
 
 ### Phase 10: Documentation Rewrite
@@ -107,7 +108,7 @@
 | 6. Sensor Entities | v1.1 | 2/2 | Complete | 2026-04-09 |
 | 7. Control Entities & Translations | v1.1 | 3/3 | Complete | 2026-04-09 |
 | 8. New Repo Extraction & Setup | v1.2 | 1/1 | Complete | 2026-04-10 |
-| 9. Rename in New Repo | v1.2 | 0/? | Not started | - |
+| 9. Rename in New Repo | v1.2 | 1/1 | Complete | 2026-04-10 |
 | 10. Documentation Rewrite | v1.2 | 0/? | Not started | - |
 | 11. Publish & Archive Legacy | v1.2 | 0/? | Not started | - |
 | 12. Maintainer Migration Verification | v1.2 | 0/? | Not started | - |

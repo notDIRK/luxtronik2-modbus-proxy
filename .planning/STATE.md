@@ -8,10 +8,10 @@ last_updated: "2026-04-10"
 last_activity: 2026-04-10
 progress:
   total_phases: 5
-  completed_phases: 1
-  total_plans: 1
-  completed_plans: 1
-  percent: 20
+  completed_phases: 2
+  total_plans: 2
+  completed_plans: 2
+  percent: 40
 ---
 
 # Project State
@@ -21,18 +21,18 @@ progress:
 See: .planning/PROJECT.md (updated 2026-04-10)
 
 **Core value:** Owners of Luxtronik 2.0 heat pumps can integrate them into modern energy management systems — with Home Assistant as the primary, supported integration path.
-**Current focus:** Milestone v1.2 — Repo Split & HA-First Rebrand (Phase 8 complete, Phase 9 ready to plan)
+**Current focus:** Milestone v1.2 — Repo Split & HA-First Rebrand (Phases 8-9 complete, Phase 10 ready to plan)
 
 ## Current Position
 
-Phase: 9 — Rename in New Repo
+Phase: 10 — Documentation Rewrite
 Plan: —
 Status: Ready to plan
-Last activity: 2026-04-10 — Phase 8 complete (new working copy at /home/dwolbeck/claude-code/luxtronik2-hass, 4/4 SC verified)
+Last activity: 2026-04-10 — Phase 9 complete (rename to luxtronik2_hass done, grep sweep clean, 36/36 tests pass)
 
-Progress: [████░░░░░░░░░░░░░░░░] 20% (1/5 v1.2 phases complete)
+Progress: [████████░░░░░░░░░░░░] 40% (2/5 v1.2 phases complete)
 
-Next action: `/gsd-plan-phase 9`
+Next action: `/gsd-plan-phase 10`
 
 ## Accumulated Context
 
